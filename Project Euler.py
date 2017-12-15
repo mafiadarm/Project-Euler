@@ -41,6 +41,7 @@ def No_2_Fibla(xrange=4000000,x=1,y=2):
         li.append(y)
     return [li[-1]-1 if li.index(li[-1])%2 == 0 else li[-2]-1][0]
 
+
 #Project Euler No.3
 '''
 最大质因数
@@ -150,11 +151,8 @@ for i in filter(is_palindrome,range(1000000)):
 '''
 def No_4_Palindromic():
     ss = [i for i in range(998002) if str(i)==str(i)[::-1] and i > 10000]
-    for i in ss[::-1]:
-        for j in range(100,1000):
-            if i%j == 0 and i/j < 1000:
-                print("最大数为：%sX%s=%s"%(j,int(i/j),i))
-                return 
+    return print(["%s X %s = %s"%(j,int(i/j),i) for i in ss[::-1] for j in range(100,1000) if i%j == 0 and i/j < 1000][0])
+                
 
 
 #Project Euler No.5
@@ -232,9 +230,8 @@ def No_6_Square_Foot_Square(s=100):
 列出前6个素数，它们分别是2、3、5、7、11和13。我们可以看出，第6个素数是13。
 
 第10,001个素数是多少？
-'''
 def No_7_Prime_X(num=10001):
-    a,b,li = 0,2,[1]
+    b,li = 2,[1]
     while li.index(li[-1]) != num:       
         if isPrime2(b):
             li.append(b)
@@ -242,6 +239,16 @@ def No_7_Prime_X(num=10001):
         else:
             b += 1
     print(li[-1])
+'''
+
+def No_7_Prime_X(num=10001):
+    from itertools import count
+    for i in count(2):
+        if isPrime2(i) and num>0:
+            num -= 1
+        elif num == 0:
+            return i-1
+    
 
 #Project Euler No.8
 '''连续数字最大乘积
@@ -927,3 +934,78 @@ def No_22_Names_Score():
     char = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     di = dict(zip([i for i in char],list(range(1,27))))
     return reduce(lambda a,b:a+b,[di.get(j)  for i in ss for j in i])
+
+#Project Euler No.23
+'''
+并非盈数之和
+完全数是指真因数之和等于自身的那些数。例如，28的真因数之和为1 + 2 + 4 + 7 + 14 = 28，因此28是一个完全数。
+
+一个数n被称为亏数，如果它的真因数之和小于n；反之则被称为盈数。
+
+由于12是最小的盈数，它的真因数之和为1 + 2 + 3 + 4 + 6 = 16，所以最小的能够表示成两个盈数之和的数是24。通过数学分析可以得出，所有大于28123的数都可以被写成两个盈数的和；尽管我们知道最大的不能被写成两个盈数的和的数要小于这个值，但这是通过分析所能得到的最好上界。
+
+----找出所有不能被写成两个盈数之和的正整数，并求它们的和。----
+
+在28123范围内，找出所有盈数(一个数平方根+1之内的范围内，遍历，能整除的，就是因子，这个数除以因子就是另一个因子)，两两相加小于28124的储存起来，用set去除相同元素，然后想加，最后用1到28123的和减去set后的和，
+
+ x = reduce(lambda a,b:a+b,[j for j in range(1,i) if i%j==0]) #遍历速度太慢，要找到其他算法
+
+可惜列表推到里面不能放break，不然就可以ls = [li[k]+li[l]  if li[k]+li[l] < num else break for k in len(li) for l in range(k,len(li))]
+'''
+def No_23_Non_Abundant_sums(num=28124):
+
+    li,ls = [],[]
+    for i in range(12,num):
+       if sum([j+int(i/j) for j in range(2,int(i**0.5)+1) if not i%j])+1 > i:
+           li.append(i)
+          
+    for k in range(len(li)): 
+        for l in range(k,len(li)):
+            if li[k]+li[l] < num:
+                ls.append(li[k]+li[l]) 
+            else:break
+
+    return sum(range(num)) - sum(set(ls))
+
+#Project Euler No.24
+'''
+字典序排列
+排列指的是将一组物体进行有顺序的放置。例如，3124是数字1、2、3、4的一个排列。如果把所有排列按照数字大小或字母先后进行排序，我们称之为字典序排列。0、1、2的字典序排列是：
+
+012   021   102   120   201   210
+数字0、1、2、3、4、5、6、7、8、9的字典序排列中第一百万位的排列是什么？
+'''
+def No_24_Lexicographic_Permutations(num=1000000,lis=[0,1,2,3,4,5,6,7,8,9]):
+    from itertools import permutations
+    return list(permutations(lis))[num-1]
+  
+
+#Project Euler No.25
+'''
+一千位斐波那契数
+斐波那契数列是按如下递归关系定义的数列：
+F1 = 1 F2 = 1
+Fn = Fn−1 + Fn−2
+
+因此斐波那契数列的前12项分别是：
+F1 = 1
+F2 = 1
+F3 = 2
+F4 = 3
+F5 = 5
+F6 = 8
+F7 = 13
+F8 = 21
+F9 = 34
+F10 = 55
+F11 = 89
+F12 = 144
+
+第一个有三位数字的项是第12项F12。
+
+在斐波那契数列中，第一个有1000位数字的是第几项？
+'''
+def No_25_1000_Digit_Fibonacci_number(num=1000,x=1,y=1,z=2):
+    while len(str(y)) != num:
+        x,y,z = y,x+y,z+1
+    return z
