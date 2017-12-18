@@ -86,6 +86,7 @@ def isPrime1(n):
     return print("它的最大质因数为%s"%max(ls))
 '''
 def isPrime2(n): #短除法，验证列表内的数字是否是质数
+    if n <= 1:return 0
     for i in range(2, int(n**0.5)+1):  
         if n % i == 0:  
             return False  
@@ -1009,3 +1010,145 @@ def No_25_1000_Digit_Fibonacci_number(num=1000,x=1,y=1,z=2):
     while len(str(y)) != num:
         x,y,z = y,x+y,z+1
     return z
+
+#Project Euler No.26
+'''
+倒数的循环节
+
+单位分数指分子为1的分数。分母为2至10的单位分数的十进制表示如下所示：
+
+1/2= 0.5
+1/3= 0.(3)
+1/4= 0.25
+1/5= 0.2
+1/6= 0.1(6)
+1/7= 0.(142857)
+1/8= 0.125
+1/9= 0.(1)
+1/10= 0.1
+
+这里0.1(6)表示0.166666…，括号内表示有一位循环节。可以看出，1/7有六位循环节。
+
+找出正整数d < 1000，其倒数的十进制表示小数部分有最长的循环节。
+
+1、上轮余数确定后，下一轮的余数和商也就确定了
+2、当某一次的余数在之前出现过时，即出现循环节
+3、1/n循环节最长为（n-1）位，因为余数最多为n种，余数为0代表除尽了
+
+如果一个数的质因子全是2和5的话，这个数的倒数是不会无限循环的
+如2，4，5，8，10
+而一个数把质因子中的2和5除去后，得到一个数，我们称之为“基数”吧
+这个数和它的基数的倒数循环的长度是相同的
+比如说3和6的倒数的循环长度都是1
+而怎么计算一个数的循环长度呢
+只需要知道它能被多少长度的9整除就行了
+3能被9整除，所以它的循环长度是1
+7能被999999整除，商正好是循环体142857，所以它的循环长度是6
+先求一个数的基数，如果是它本身，则计算它的循环长度
+如果不是它自身，那它的循环长度等于基数的循环长度
+我们规定1的循环长度是0，这样所以只含2，5为质因子的数的基数都为1，循环长度为0
+'''
+'''
+def No_26_Reciprocal_Cycles():
+    length = 0
+    n = 0 
+    for i in range(2, 1000):
+        l = cycle_length(i)
+        if l > length:
+            length = l
+            n = i
+    return n
+
+def cycle_length(n):
+    i = 1
+    if n % 2 == 0: return cycle_length(n / 2)
+    if n % 5 == 0: return cycle_length(n / 5)
+    while True:
+        if (pow(10, i) - 1) % n == 0: return i
+        else: i = i + 1
+此表达是没问题，但是会报错OverflowError: int too large to convert to float
+'''       
+def Cycles(x):
+    a,lis = 1,[]
+    while a%x not in lis: #验证余数的重复
+        lis.append(a%x)
+        a*=10
+    if not lis[-1]:return 0 #用0占位，同时把末尾是0的去掉
+    else:return(len(lis)-lis.index(a%x)) # -lis.index(a%x)是为了清理300/3=100这种数
+
+def No_26_Reciprocal_Cycles():
+    ls = [0]
+    for d in range(2,1000):
+        ls.append(Cycles(d))
+    return ("循环节 {}，数字 {}".format(str(max(ls)),max(ls)+1)) # 1/n循环节最长为（n-1）位
+
+#Project Euler No.27
+'''
+二次“素数生成”多项式
+
+欧拉发现了这个著名的二次多项式：
+
+n² + n + 41
+
+对于连续的整数n从0到39，这个二次多项式生成了40个素数。然而，当n = 40时，40² + 40 + 41 = 40(40 + 1) + 41能够被41整除，同时显然当n = 41时，41² + 41 + 41也能被41整除。
+
+随后，另一个神奇的多项式n² − 79n + 1601被发现了，对于连续的整数n从0到79，它生成了80个素数。这个多项式的系数-79和1601的乘积为-126479。
+
+考虑以下形式的二次多项式：
+
+    n² + an + b, 满足|a| < 1000且|b| < 1000
+
+    其中|n|指n的模或绝对值
+    例如|11| = 11以及|−4| = 4
+
+这其中存在某个二次多项式能够对从0开始尽可能多的连续整数n都生成素数，求其系数a和b的乘积。
+'''
+def No_27_Quadratic_Primes():
+    po=a=b=0
+    for i in range(-1000,1000): # 范围在±1000以内
+        for j in range(-1000,1000):
+            cha = 0
+            res = j # 
+            while isPrime2(res): # 只要是连续的，cha就会保持计数
+                res = cha**2+cha*i+j
+                cha += 1
+            if po < cha: # 对以上循环的结果进行赋值回收
+                po = cha
+                a = i
+                b = j
+    return po,a,b,a*b
+
+#Project Euler No.28
+'''
+螺旋数阵对角线
+
+从1开始，按顺时针顺序向右铺开的5 × 5螺旋数阵如下所示：
+
+21 22 23 24 25
+20  7  8  9 10
+19  6  1  2 11
+18  5  4  3 12
+17 16 15 14 13
+可以验证，该数阵对角线上的数之和是101。
+
+以同样方式构成的1001 × 1001螺旋数阵对角线上的数之和是多少？
+
+右上刚好是1² 3² 5² 7²
+第一圈的角=
+3²-1*2
+3²-2*2
+3²-3*2
+第二圈的角=
+5²-1*4
+5²-2*4
+5²-3*4
+第三圈的角=
+7²-1*6
+7²-2*6
+7²-3*6
+每一层的根是 2*层数 中的奇数
+'''
+def No_28_Number_Spiral_diagonals(num=1001):
+    li = [i**2 for i in range(1,2*num) if i%2]
+    ls = [li[int(i/2)]-i*j for i in range(2,len(li)*2,2) for j in range(1,4)]
+    return sum(li)+sum(ls)
