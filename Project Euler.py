@@ -877,6 +877,30 @@ def No_18_Maximum_Path():
 闰年指的是能够被4整除却不能被100整除的年份，或者能够被400整除的年份。
 在二十世纪（1901年1月1日到2000年12月31日）中，有多少个月的1号是星期天？
 '''
+'''
+def No_19_Counting_Sundays():
+    week = 365%7+1
+    ss = []
+    for y in range(1901,2001):
+        month = {1:31,2:28,3:31,4:30,5:31,6:30,7:31,8:31,9:30,10:31,11:30,12:31}
+        if (y%4==0 and y%100!=0) or y%400==0:
+            month[2]=29
+        for i in range(1,13):
+            week += month.get(i)%7
+            if week%7 == 0:
+                if i+1 > 12:
+                    ss.append((y+1,1))
+                else:ss.append((y,i+1))
+    return len(ss)
+'''
+def No_19_Counting_Sundays():
+    import datetime
+    a = 0
+    for year in range(1901,2001):
+        for month in range(1,13):
+            if datetime.datetime(year,month,1).weekday()==6:
+                a += 1
+    return a
 
 #Project Euler No.20
 '''
@@ -1148,7 +1172,156 @@ def No_27_Quadratic_Primes():
 7²-3*6
 每一层的根是 2*层数 中的奇数
 '''
+'''
 def No_28_Number_Spiral_diagonals(num=1001):
     li = [i**2 for i in range(1,2*num) if i%2]
     ls = [li[int(i/2)]-i*j for i in range(2,len(li)*2,2) for j in range(1,4)]
-    return sum(li)+sum(ls)
+    return sum(li+ls)
+'''
+'''
+从2开始，每隔4次增加2，刚好是奇数-1
+'''
+def No_28_Number_Spiral_diagonals(num=1001):
+    res=iterm=1
+    for i in range(3,num*2,2):
+        for j in range(1,5):
+            iterm += i-1
+            res += iterm
+    return res
+
+#Project Euler No.29
+'''
+不同的幂
+
+考虑所有满足2 ≤ a ≤ 5和2 ≤ b ≤ 5的整数组合生成的幂ab：
+
+22=4, 23=8, 24=16, 25=32
+32=9, 33=27, 34=81, 35=243
+42=16, 43=64, 44=256, 45=1024
+52=25, 53=125, 54=625, 55=3125
+
+如果把这些幂按照大小排列并去重，我们得到以下由15个不同的项组成的序列：
+
+4, 8, 9, 16, 25, 27, 32, 64, 81, 125, 243, 256, 625, 1024, 3125
+在所有满足2 ≤ a ≤ 100和2 ≤ b ≤ 100的整数组合生成的幂ab排列并去重所得到的序列中，有多少个不同的项？
+'''
+def No_29_Distinct_Powers(num=100):
+    return len(set([i**j for i in range(2,num+1) for j in range(2,num+1)]))
+
+#Project Euler No.30
+'''
+各位数字的五次幂
+
+令人惊讶的是，只有三个数可以写成它们各位数字的四次幂之和：
+
+1634 = 14 + 64 + 34 + 44
+8208 = 84 + 24 + 04 + 84
+9474 = 94 + 44 + 74 + 44
+
+由于1 = 14不是一个和，所以这里并没有把它包括进去。
+
+这些数的和是1634 + 8208 + 9474 = 19316。
+
+找出所有可以写成它们各位数字的五次幂之和的数，并求这些数的和。
+'''
+'''
+我们取极限值，假设每一位都是数字9.每一位数的5次方也就是9^5=59049. 只有一位的时候没有问题，因为有1的存在。
+我们要找的就是最大的值 两位的时候最大是99肯定也没有问题 三位的时候也没有问题 四位的时候也没有问题。
+5位的时候也可以。因为9的5次方就是一个5位数。 6位数也是可以的，我们来看一下，假如说6位都是9.最后的结果就是6*9^5=354294
+是一个六位数。 7位的时候，结果最大是7*9^5=413343也是一个6位数，肯定小于七位数。 所以我们通过分析，最大不会超过354294.
+'''
+def No_30_Digit_Fifth_powers():
+    from itertools import count
+    li = []
+    for n in count(2):
+        s = 0
+        for i in str(n):
+            s += int(i)**5
+        if s == n:
+            li.append(s)
+        elif s > 354294:
+            return sum(li),li
+'''
+以下这种方式会更快
+# 找出所有能写成各位数字五次方之和的数之和
+# 比如 ABCD = A**5 + B**5 + C**5 + D**5
+from time import time 
+import itertools
+def euler030():
+    l_nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    l_result = []
+    #粗略算一下，只能是3-6位数之间
+    for i in range(3, 7):
+        for each in itertools.combinations_with_replacement(l_nums, i):
+            n_sum = sum([x ** 5 for x in each])
+            t1 = list(each)
+            t1.sort()
+            t2 = [int(n) for n in list(str(n_sum))]
+            t2.sort()
+            if t1 == t2:
+                l_result.append(n_sum)
+    print(sum(l_result))           
+if __name__ == '__main__':
+    start = time() 
+    euler030()
+    print('cost %.6f sec' % (time() - start))
+'''
+#Project Euler No.31  
+'''
+硬币求和
+
+英国的货币单位包括英镑£和便士p，在流通中的硬币一共有八种：
+
+1p, 2p, 5p, 10p, 20p, 50p, £1 (100p), £2 (200p)
+
+以下是组成£2的其中一种可行方式：
+
+1×£1 + 1×50p + 2×20p + 1×5p + 1×2p + 3×1p
+
+不限定使用的硬币数目，组成£2有多少种不同的方式？
+'''
+def No_31_Coin_Sums():
+    num = 0
+    for i in range(3):
+        for j in range(5):
+            if i*100+j*50>200:
+                break
+            for k in range(11):
+                if i*100+j*50+k*20>200:
+                    break
+                for l in range(21):
+                    if i*100+j*50+k*20+l*10>200:
+                        break
+                    for m in range(41):
+                        if i*100+j*50+k*20+l*10+m*5>200:
+                            break
+                        for n in range(101):
+                            if i*100+j*50+k*20+l*10+m*5+n*2>200:
+                                break
+                            for o in range(201):
+                                if i*100+j*50+k*20+l*10+m*5+n*2+o*1==200:
+                                    num += 1
+                                    break
+                                elif i*100+j*50+k*20+l*10+m*5+n*2+o*1>200:
+                                    break
+    return num+1
+
+#Project Euler No.32
+'''
+全数字的乘积
+
+如果一个n位数包含了1至n的所有数字恰好一次，我们称它为全数字的；例如，五位数15234就是1至5全数字的。
+
+7254是一个特殊的乘积，因为在等式39 × 186 = 7254中，被乘数、乘数和乘积恰好是1至9全数字的。
+
+找出所有被乘数、乘数和乘积恰好是1至9全数字的乘法等式，并求出这些等式中乘积的和。
+
+注意：有些乘积可能从多个乘法等式中得到，但在求和的时候只计算一次
+'''
+def No_32_Pandigital_Products():
+    lis = []
+    for i in range(1,100):
+          for j in range(100,10000):
+                if len(str(i))+len(str(j))+len(str(i*j))==9 and sorted(str(i)+str(j)+str(i*j))==['1', '2', '3', '4', '5', '6', '7', '8', '9']:
+                    lis.append(i*j)             
+    return sum(set(lis))
