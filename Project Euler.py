@@ -1325,3 +1325,166 @@ def No_32_Pandigital_Products():
                 if len(str(i))+len(str(j))+len(str(i*j))==9 and sorted(str(i)+str(j)+str(i*j))==['1', '2', '3', '4', '5', '6', '7', '8', '9']:
                     lis.append(i*j)             
     return sum(set(lis))
+
+#Project Euler No.33
+'''
+消去数字的分数
+
+49/98是一个有趣的分数，因为缺乏经验的数学家可能在约简时错误地认为，等式49/98 = 4/8之所以成立，是因为在分数线上下同时抹除了9的缘故。
+
+我们也会想到，存在诸如30/50 = 3/5这样的平凡解。
+
+这类有趣的分数恰好有四个非平凡的例子，它们的分数值小于1，且分子和分母都是两位数。
+
+将这四个分数的乘积写成最简分数，求此时分母的值。
+'''
+def No_33_Digit_Cancelling_fractions():
+    from functools import reduce
+    ls = []
+    for i in [[i,j] for i in range(11,100) for j in range(10,i) if j%10!=0]:
+        if int(str(i[0])[0])==int(str(i[1])[0]) and i[0]/i[1]==int(str(i[0])[1])/int(str(i[1])[1]):
+            ls.append(i)
+        elif int(str(i[0])[1])==int(str(i[1])[0]) and i[0]/i[1]==int(str(i[0])[0])/int(str(i[1])[1]):
+            ls.append(i)
+        elif int(str(i[0])[0])==int(str(i[1])[1]) and i[0]/i[1]==int(str(i[0])[1])/int(str(i[1])[0]):
+            ls.append(i)
+        elif int(str(i[0])[1])==int(str(i[1])[1]) and i[0]/i[1]==int(str(i[0])[0])/int(str(i[1])[0]):
+            ls.append(i)
+    return int(reduce(lambda a,b:a*b,[i[0] for i in ls])/reduce(lambda a,b:a*b,[i[1] for i in ls]))
+
+#Project Euler No.34
+'''
+各位数字的阶乘
+
+145是个有趣的数，因为1! + 4! + 5! = 1 + 24 + 120 = 145。
+
+找出所有各位数字的阶乘和等于其本身的数，并求它们的和。
+
+注意：因为1! = 1和2! = 2不是和的形式，所以它们并不在讨论范围内。
+
+因为8*9!<8位，所以范围定在7*9!以内,遍历此范围内所有数，比较"阶乘和"与此数
+'''
+
+def No_34_Digit_Factorials():
+    from math import factorial
+    dirc = {j:factorial(k) for j,k in enumerate(range(10), 0)}
+    result = []
+    for i in range(11, dirc[9] * 7):
+        i_Split = list(str(i))
+        i_Sum = sum([dirc[int(k)] for k in i_Split])
+        if i == i_Sum:
+            result.append(i)
+    return result,sum(result)
+'''
+如果没有重复的数字，可以用次方法
+def No_34_Digit_Factorials():
+    from math import factorial  # 阶乘
+    from itertools import permutations
+    ll = []
+    lis = [factorial(x) for x in range(0, 10)]
+    for i in range(2, 7):
+        ls = [k for (k, j) in enumerate(lis) if j < 10**i]
+        for each in permutations(ls, i):  # 排列可能
+            nstr = ''
+            nums = 0
+            for j in each:
+                nstr += str(j)
+                nums += lis[j]
+            if nums == int(nstr):
+                ll.append(nums)
+    return ll
+'''
+
+#Project Euler No.35
+'''
+圆周素数
+
+197被称为圆周素数，因为将它逐位旋转所得到的数：197/971和719都是素数。
+
+小于100的圆周素数有十三个：2、3、5、7、11、13、17、31、37、71、73、79和97。
+
+小于一百万的圆周素数有多少个？
+'''
+'''
+先整理去掉一些数字
+[j for i in range(2,num) for j in range(i*i,num,i)]去除此列表内所有数字
+用替换的方式
+'''
+def No_35_Circular_Primes(num=1000000):
+    excp_Num_list = [1] * num
+    excp_Num_list[0]=excp_Num_list[1]=0
+    for i in range(num):
+        if excp_Num_list[i]:
+            for j in range(i*i, num, i):  # 清除非质数
+                excp_Num_list[j] = 0
+    all_num = [k for k,l in enumerate(excp_Num_list) if l]  # 整理
+    lss = 0
+    for m in all_num:
+        str_Num = str(m)
+        for n in range(len(str_Num)):
+            str_Num = str_Num[1:] + str_Num[0]
+            if isPrime2(int("".join(str_Num))):
+                pass
+            else:
+                lss += 1
+                break       
+    return len(all_num)-lss
+'''
+比较慢的验证方法
+ll = []
+for m in all_num:
+    lss = 0
+    str_Num = str(m)
+    for n in range(len(str_Num)):
+        str_Num = str_Num[1:] + str_Num[0]
+        if int(str_Num) in all_num:
+            lss += 1
+        else:break
+    if lss == len(str_Num):
+        ll.append(m)
+'''
+'''
+更快的算法
+from time import time
+def getPrimes(N=1000000):
+    l_result = [True] * N  # 占位 预留True
+    l_result[0], l_result[1] = False, False  # 去掉1,0
+    for i in range(0, N):
+        if l_result[i]:
+            for j in range(i * i, N, i):  # 去掉平方，及倍数
+                l_result[j] = False
+    return l_result  # 返回处理后的列表
+
+def euler034(N=1000000):
+    l_primes = getPrimes(N)
+    l_k = [k for (k, v) in enumerate(l_primes) if v]  # 把True转成数字
+    l_result = []
+    for each in l_k:  # 遍历处理后全是数字的列表
+        if each in l_result:
+            continue  # 去掉在l_result列表的数字
+        tmp = str(each)  # 格式化数字以后
+        if len(tmp) == 1:  # 满足1位数的，放到l_result里面
+            l_result.append(each)
+            continue
+        else:
+            flag = True
+            l_tmp = []
+            for i in range(1, len(tmp)):
+                tmp = tmp[1:] + tmp[0]
+                if not l_primes[int(tmp)]:
+                    flag = False
+                    break
+                else:
+                    l_tmp.append(int(tmp))
+            if flag:
+                l_result.append(each)
+                l_result.extend(l_tmp)
+    l_result = list(set(l_result))
+    l_result.sort()
+    print(l_result)
+    print(len(l_result))
+if __name__ == '__main__':
+    start = time()
+    euler034(1000000)
+    print('cost %.6f sec' % (time() - start))
+'''
