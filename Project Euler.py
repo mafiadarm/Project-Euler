@@ -86,11 +86,11 @@ def isPrime1(n):
     return print("它的最大质因数为%s"%max(ls))
 '''
 def isPrime2(n): #短除法，验证列表内的数字是否是质数
-    if n <= 1:return 0
-    for i in range(2, int(n**0.5)+1):  
-        if n % i == 0:  
-            return False  
-    return True
+    if int(n**0.5)**2 != n and n != 1 and n != 0:
+        for i in range(2, int(n**0.5)+1):
+            if n % i == 0:
+                return False
+        return True
 
 def isPrime3(n): #列出所有质因子，如果传1进去，列表会是空值
     li,f = [],2
@@ -1350,7 +1350,7 @@ def No_33_Digit_Cancelling_fractions():
             ls.append(i)
         elif int(str(i[0])[1])==int(str(i[1])[1]) and i[0]/i[1]==int(str(i[0])[0])/int(str(i[1])[0]):
             ls.append(i)
-    return int(reduce(lambda a,b:a*b,[i[0] for i in ls])/reduce(lambda a,b:a*b,[i[1] for i in ls]))
+    return int(reduce(lambda a, b: a*b, [i[0] for i in ls])/reduce(lambda a, b: a*b, [i[1] for i in ls]))
 
 #Project Euler No.34
 '''
@@ -1488,3 +1488,43 @@ if __name__ == '__main__':
     euler034(1000000)
     print('cost %.6f sec' % (time() - start))
 '''
+#Project Euler No.36
+'''
+双进制回文数
+
+十进制数585 = 10010010012（二进制表示），因此它在这两种进制下都是回文数。
+
+找出所有小于一百万，且在十进制和二进制下均回文的数，并求它们的和。
+
+（请注意，无论在哪种进制下，回文数均不考虑前导零。）
+
+2进制可以这么来表示 "{:b}".format(i) 或者 str(bin(i)[2:]
+'''
+# 回文检测
+def is_palindrome(n):
+    return str(n) == str(n)[::-1]
+
+def No_36_Double_Base_palindromes(sour_num=1000000):
+    return sum([i for i in range(sour_num) if is_palindrome(str(bin(i))[2:]) and is_palindrome(i)])
+
+#Project Euler No.37
+'''
+可截素数
+
+3797有着奇特的性质。不仅它本身是一个素数，而且如果从左往右逐一截去数字，剩下的仍然都是素数：3797、797、97和7；同样地，如果从右往左逐一截去数字，剩下的也依然都是素数：3797、379、37和3。
+
+只有11个素数，无论从左往右还是从右往左逐一截去数字，剩下的仍然都是素数，求这些数的和。
+
+注意：2、3、5和7不被视为可截素数。
+
+方法是切片[i::]和[:-i:]
+'''
+def No_37_Truncatable_Primes():
+    lis = []
+    num = 10
+    while len(lis) < 11:
+        if sum([1 for i in range(len(str(num))) if isPrime2(int(str(num)[i::]))]) == len(str(num)):
+            if sum([1 for i in range(1, len(str(num))) if isPrime2(int(str(num)[:-i:]))]) == len(str(num))-1:
+                lis.append(num)
+        num += 1
+    return sum(lis), lis
