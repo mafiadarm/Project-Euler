@@ -1429,6 +1429,15 @@ def No_35_Circular_Primes(num=1000000):
                 lss += 1
                 break       
     return len(all_num)-lss
+
+def Prime_list(N):  # 返回N以内所有的素数
+    l_result = [True] * N  # 占位 预留True
+    l_result[0], l_result[1] = False, False  # 去掉1,0
+    for i in range(0, N):
+        if l_result[i]:
+            for j in range(i * i, N, i):  # 去掉平方，及倍数
+                l_result[j] = False
+    return [k for k, v in enumerate(l_result) if v]  # 返回处理后的列表
 '''
 比较慢的验证方法
 ll = []
@@ -1528,3 +1537,151 @@ def No_37_Truncatable_Primes():
                 lis.append(num)
         num += 1
     return sum(lis), lis
+
+#Project Euler No.38
+'''
+全数字的倍数
+
+将192分别与1、2、3相乘：
+
+192 × 1 = 192
+192 × 2 = 384
+192 × 3 = 576
+
+连接这些乘积，我们得到一个1至9全数字的数192384576。我们称192384576为192和(1,2,3)的连接乘积。
+
+同样地，将9分别与1、2、3、4、5相乘，得到1至9全数字的数918273645，即是9和(1,2,3,4,5)的连接乘积。
+
+对于n > 1，所有某个整数和(1,2, … ,n)的连接乘积所构成的数中，最大的1至9全数字的数是多少？
+
+解释一下：在所有整数中，与从1到9[n]乘积连续放在一起[不一定要乘到9]，刚好包含1-9并且无重复
+求此整数[与n] n 必须大于 1
+
+判断条件需要满足以下
+    anth_list = list("123456789")
+    result = ""
+    len(result) == 9
+    sorted(result) == anth_list
+最小就是1，[123456789]
+思考一下，如果n=1 结果自然是987654321，但是n>1 
+就是说至少是2 而且拼接的值要是能*2进位的
+所以最大的值不能超过5位，[如果是5位则必须大于5000]
+总之可以从100000开始往前找
+'''
+def No_38_Pandigital_Multiples():
+    anth_list = list("123456789")
+    for max_num in range(100000, 0, -1):
+        str_num = ""
+        for i in range(1, 10):
+            str_num += str(max_num*i)
+            if len(str_num) == 9 and sorted(str_num) == anth_list:
+                return max_num, [j for j in range(1, i+1)]
+            elif len(str_num) > 9:
+                break
+
+#Project Euler No.39
+'''
+整数边长直角三角形
+
+若三边长{a,b,c}均为整数的直角三角形周长为p，当p = 120时，恰好存在三个不同的解：
+
+{20,48,52}, {24,45,51}, {30,40,50}
+在所有的p ≤ 1000中，p取何值时有解的数目最多？
+
+直角三角形都满足毕达哥拉斯
+
+通过最大的value，找对应的key 这里用到collections里面的Counter
+max(dict(Counter([11,22,33,22])), key=dict(Counter([11,22,33,22])).get)
+'''
+def No_39_Integer_Right_triangles(num=1000):
+    from collections import Counter
+    lis = []
+    for i in range(1, num):
+        for j in range(i + 1, num):
+            k = (i ** 2 + j ** 2) ** 0.5
+            if k % 1 == 0 and k + i + j <= num:
+                lis.append(tuple(sorted((i, j, int(k)))))  # Counter只能统计tuple
+            elif k + i + j > num:
+                break
+    set_list = set(tuple(lis))  # 去掉重复的组合
+    only_count = dict(Counter([sum([n for n in m]) for m in set_list]))  # 计算各个组合的和
+    p = int(max(only_count, key=only_count.get))  # 最多的值
+    return p, [m for m in set_list if sum([n for n in m]) == p]
+
+#Project Euler No.40
+'''
+钱珀瑙恩常数
+
+将所有正整数连接起来构造的一个十进制无理数如下所示：
+
+0.123456789101112131415161718192021…
+可以看出小数点后第12位数字是1。
+
+如果dn表示上述无理数小数点后的第n位数字，求下式的值：
+
+d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000
+'''
+def No_40_Champernowne_Constant():
+    from itertools import count
+    str_num = ""
+    for i in count(1):
+        str_num += str(i)
+        if len(str_num) > 1000000:
+            break
+    constant = int(str_num[0])
+    for j in range(1, 7):
+        constant *= int(str_num[10**j-1])
+    return constant
+
+#Project Euler No.41
+'''
+全数字的素数
+
+如果一个n位数恰好使用了1至n每个数字各一次，我们就称其为全数字的。例如，2143就是一个4位全数字数，同时它恰好也是一个素数。
+
+最大的全数字的素数是多少？
+
+遍历小于10**9-1以内的素数，如果各个数字只用了一次
+当然不能遍历，不管怎么看都会很大的数字，所以只能用组合
+
+结果相当神奇：9位和8位都没有，但是7位有534个
+'''
+
+
+def No_41_Pandigital_Prime():
+    from itertools import permutations
+    import time
+    star = time.time()
+    for ite in range(9, 0, -1):
+        lis = "123456789"[:ite:]
+        prime_list = [int("".join(i)) for i in permutations(lis) if isPrime2(int("".join(i)))]
+        if len(prime_list) != 0:
+            return max(prime_list)
+
+#Project Euler No.42
+'''
+编码三角形数
+
+三角形数序列的第n项由公式tn[t的n次方] = 1/2 n(n+1)[1/2的n(n+1)次方]给出；因此前十个三角形数是：
+
+1, 3, 6, 10, 15, 21, 28, 36, 45, 55, …
+将一个单词的每个字母分别转化为其在字母表中的顺序并相加，我们可以计算出一个单词的值。例如，单词SKY的值就是 19 + 11 + 25 = 55 = t10。如果一个单词的值是一个三角形数，我们就称这个单词为三角形单词。
+
+在这个16K的文本文件words.txt （右击并选择“目标另存为……”）中包含有将近两千个常用英文单词，这其中有多少个三角形单词？
+'''
+def No_41_Coded_Triangle_Numbers():
+    from itertools import count
+    with open(r"p042_words.txt", "r+") as word:
+        lis = word.readlines()[0]
+    word_list = set(lis.split("\""))
+    word_list.remove("")
+    word_list.remove(",")
+    num_list = []
+    larg = max([len(l) for l in word_list])
+    for i in count(1):
+        num_list.append(int((1 / 2) * i * (i + 1)))
+        if num_list[-1] > larg * 26:
+            break
+    di = {value: num for num, value in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1)}
+    num_form = [sum([di.get(n) for n in word]) for word in word_list]
+    return sum([1 for num in num_form if num in num_list])
