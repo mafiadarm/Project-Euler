@@ -1,7 +1,8 @@
 # -- coding = utf-8 -- version 3.6
 #Project Euler No.1
 #第一次体会到算法的差别有多大
-'''
+
+"""
 3的倍数和5的倍数
 如果我们列出10以内所有3或5的倍数，我们将得到3、5、6和9，这些数的和是23。
 
@@ -19,7 +20,7 @@ def suma(xrange,num): #效率较低的方法
 
 def sumb(xrange=0,num=0): #省略大部分遍历时间
     return (num+num*(xrange//num))*(xrange//num)/2
-'''
+"""
 def No_1_Sums(xrange=1000,x=3,y=5): #减去被覆盖那部分
     return (x+x*(xrange//x))*(xrange//x)/2 + (y+y*(xrange//y))*(xrange//y)/2 - (x*y+x*y*(xrange//(x*y)))*(xrange//(x*y))/2
 
@@ -914,7 +915,7 @@ n! 的意思是 n × (n − 1) × … × 3 × 2 × 1
 def No_20_Factorial_Digit_sum(num=100):
     import math
     from functools import reduce
-    return reduce(lambda a,b:a+b,[int(i) for i in str(math.factorial(100))])
+    return reduce(lambda a,b:a+b,[int(i) for i in str(math.factorial(num))])
 
 #Project Euler No.21
 '''亲和数
@@ -1000,7 +1001,7 @@ def No_23_Non_Abundant_sums(num=28124):
 012   021   102   120   201   210
 数字0、1、2、3、4、5、6、7、8、9的字典序排列中第一百万位的排列是什么？
 '''
-def No_24_Lexicographic_Permutations(num=1000000,lis=[0,1,2,3,4,5,6,7,8,9]):
+def No_24_Lexicographic_Permutations(num=1000000, lis={0, 1, 2, 3, 4, 5, 6, 7, 8, 9}):
     from itertools import permutations
     return list(permutations(lis))[num-1]
   
@@ -1098,13 +1099,13 @@ def Cycles(x):
         lis.append(a%x)
         a*=10
     if not lis[-1]:return 0 #用0占位，同时把末尾是0的去掉
-    else:return(len(lis)-lis.index(a%x)) # -lis.index(a%x)是为了清理300/3=100这种数
+    else: return len(lis)-lis.index(a%x) # -lis.index(a%x)是为了清理300/3=100这种数
 
 def No_26_Reciprocal_Cycles():
     ls = [0]
     for d in range(2,1000):
         ls.append(Cycles(d))
-    return ("循环节 {}，数字 {}".format(str(max(ls)),max(ls)+1)) # 1/n循环节最长为（n-1）位
+    return "循环节 {}，数字 {}".format(str(max(ls)),max(ls)+1) # 1/n循环节最长为（n-1）位
 
 #Project Euler No.27
 '''
@@ -1669,7 +1670,7 @@ def No_41_Pandigital_Prime():
 
 在这个16K的文本文件words.txt （右击并选择“目标另存为……”）中包含有将近两千个常用英文单词，这其中有多少个三角形单词？
 '''
-def No_41_Coded_Triangle_Numbers():
+def No_42_Coded_Triangle_Numbers():
     from itertools import count
     with open(r"p042_words.txt", "r+") as word:
         lis = word.readlines()[0]
@@ -1685,3 +1686,130 @@ def No_41_Coded_Triangle_Numbers():
     di = {value: num for num, value in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1)}
     num_form = [sum([di.get(n) for n in word]) for word in word_list]
     return sum([1 for num in num_form if num in num_list])
+
+#Project Euler No.43
+'''
+子串的可整除性
+
+1406357289是一个0至9全数字数，因为它由0到9这十个数字排列而成；但除此之外，它还有一个有趣的性质：子串的可整除性。
+
+记d1是它的第一个数字，d2是第二个数字，依此类推，我们注意到：
+
+d2d3d4=406能被2整除
+d3d4d5=063能被3整除
+d4d5d6=635能被5整除
+d5d6d7=357能被7整除
+d6d7d8=572能被11整除
+d7d8d9=728能被13整除
+d8d9d10=289能被17整除
+找出所有满足同样性质的0至9全数字数，并求它们的和。
+'''
+def No_43_Sub_String_Divisibility():
+    from itertools import permutations
+    permutations_list = [per_num for per_num in permutations("0123456789") if per_num[0] != "0"]
+    divisor_list = [p for p in range(18) if isPrime2(p)]
+    result_list = []
+    for i in permutations_list:
+        judge = 0
+        for j in range(7):
+            if int(i[1 + j] + i[2 + j] + i[3 + j]) % divisor_list[j] == 0: pass
+            else: judge = 1
+        if judge == 0: result_list.append(i)
+    return sum([int("".join(k)) for k in result_list]), [int("".join(k)) for k in result_list]
+
+#Project Euler No.44
+'''
+五边形数
+
+五边形数由公式Pn=n(3n−1)/2生成。前十个五边形数是：
+
+1, 5, 12, 22, 35, 51, 70, 92, 117, 145, …
+可以看出P4 + P7 = 22 + 70 = 92 = P8。然而，它们的差70 − 22 = 48并不是五边形数。
+
+在所有和差均为五边形数的五边形数对Pj和Pk中，找出使D = |Pk − Pj|最小的一对；此时D的值是多少？
+
+jk越接近，差值越小，找出第一对，就是最小的
+
+先造列表 用set来查询，效率不一般的高！
+'''
+'''
+遍历不是好方法
+def isPentagon_Number(x):
+    from itertools import count
+    for i in count(1):
+        if x == i*(3*i-1)/2: return True
+        elif i > x: return False
+        else: pass
+
+def No_44_Pentagon_Numbers():
+    x = 1
+    while True:
+        x += 1
+        for n in range(x, 0, -1):
+            dif_num = x*(3*x-1)/2 - n*(3*n-1)/2
+            sum_num = x*(3*x-1)/2 + n*(3*n-1)/2
+            if isPentagon_Number(dif_num) and isPentagon_Number(sum_num):
+                return x*(3*x-1)/2, n*(3*n-1)/2, dif_num
+'''
+def No_44_Pentagon_Numbers(num=1):
+    while True:
+        num *= 10  # 不知道上限，就10倍往上找
+        nums = [int(i*(3*i-1)/2) for i in range(1, num)]
+        pen = set(nums)
+        for x in range(1, num-1):
+            for n in range(0, x):
+                if nums[x]-nums[n] in pen and nums[x]+nums[n] in pen:
+                    return nums[x]-nums[n]
+
+#Project Euler No.45
+'''
+三角形数、五边形数和六角形数
+
+三角形数、五边形数和六角形数分别由以下公式给出：
+ 	 	 
+三角形数	Tn=n(n+1)/2	1, 3, 6, 10, 15, …
+五边形数	Pn=n(3n−1)/2	1, 5, 12, 22, 35, …
+六边形数	Hn=n(2n−1)	1, 6, 15, 28, 45, …
+可以验证，T285 = P165 = H143 = 40755。
+
+找出下一个同时是三角形数、五边形数和六角形数的数。
+
+'''
+'''
+用二元一次方程直接求解：六角数一定是三角数，第N个六边形数同时是第2N-1个三角形数
+n = 144
+while True:
+    m = n*(2*n-1)
+    if ((m*24+1)**0.5+1)%6 == 0:
+        print(m)
+        break
+    n += 1
+'''
+'''
+def No_45_Triangular_Pentagonal_and_Hexagonal():
+    from collections import Counter
+    num = 100
+    while True:
+        num *= 10
+        Triangular_list = [int(n*(n+1)/2) for n in range(286, num)]
+        Pentagonal_list = [int(j*(3*j-1)/2) for j in range(166, num)]
+        Hexagonal_list = [k*(2*k-1) for k in range(144, num)]
+        dic = Counter(Triangular_list + Pentagonal_list + Hexagonal_list)
+        for num_result in Triangular_list:
+            if dic.get(num_result) == 3:
+                return num_result
+        print(num, "范围内还没有")
+'''
+def No_45_Triangular_Pentagonal_and_Hexagonal():
+    from collections import Counter
+    num = 100
+    while True:
+        num *= 10
+        Pentagonal_list = [int(j*(3*j-1)/2) for j in range(166, num)]
+        Hexagonal_list = [k*(2*k-1) for k in range(144, num)]
+        dic = Counter(Pentagonal_list + Hexagonal_list)
+        if dic.get(max(dic, key=dic.get)) > 1:
+            return max(dic, key=dic.get)
+
+
+
