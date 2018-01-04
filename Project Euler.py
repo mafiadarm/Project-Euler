@@ -1439,6 +1439,15 @@ def Prime_list(N):  # 返回N以内所有的素数
             for j in range(i * i, N, i):  # 去掉平方，及倍数
                 l_result[j] = False
     return [k for k, v in enumerate(l_result) if v]  # 返回处理后的列表
+
+def Not_Prime_list(N):  # 返回N以内所有的非素数
+    l_result = [True] * N  # 占位 预留True
+    l_result[0], l_result[1] = False, False  # 去掉1,0
+    for i in range(0, N):
+        if l_result[i]:
+            for j in range(i * i, N, i):  # 去掉平方，及倍数
+                l_result[j] = False
+    return [k for k, v in enumerate(l_result) if not v]  # 返回处理后的列表
 '''
 比较慢的验证方法
 ll = []
@@ -1811,5 +1820,172 @@ def No_45_Triangular_Pentagonal_and_Hexagonal():
         if dic.get(max(dic, key=dic.get)) > 1:
             return max(dic, key=dic.get)
 
+#Project Euler No.46
+'''
+哥德巴赫的另一个猜想
 
+克里斯蒂安·哥德巴赫曾经猜想，每个奇合数可以写成一个素数和一个平方的两倍之和。
 
+9 = 7 + 2×1²
+15 = 7 + 2×2²
+21 = 3 + 2×3²
+25 = 7 + 2×3²
+27 = 19 + 2×2²
+33 = 31 + 2×1²
+
+最终这个猜想被推翻了。
+
+最小的不能写成一个素数和一个平方的两倍之和的奇合数是多少？
+'''
+def No_46_Goldbach_other_Conjecture():
+    range_num = 10
+    while True:
+        range_num *= 10
+        prime_nums = [i for i in range(2, range_num) if isPrime2(i)]
+        odd_divisible_num = [i for i in range(2, range_num) if not isPrime2(i) and i % 2 == 1]
+        delete_num = []
+        for i in odd_divisible_num:
+            for j in prime_nums:
+                if i > j:
+                    if (((i - j) / 2) ** 0.5) % 1 == 0:
+                        delete_num.append(i)
+                        break
+                else: break
+        result_set = set(odd_divisible_num) - set(delete_num)
+        if len(result_set) != 0:
+            return min(result_set)
+        else: print(range_num, "内无此数")
+
+#Project Euler No.47
+'''
+不同的质因数
+
+首次出现连续两个数均有两个不同的质因数是在：
+
+14 = 2 × 7
+15 = 3 × 5
+首次出现连续三个数均有三个不同的质因数是在：
+
+644 = 2² × 7 × 23
+645 = 3 × 5 × 43
+646 = 2 × 17 × 19
+首次出现连续四个数均有四个不同的质因数时，其中的第一个数是多少？
+'''
+def No_47_Distinct_Primes_factors():
+    from collections import Counter
+    from itertools import count
+    for i in count(1):
+        li = []
+        for j in range(i, i + 4):
+            d1 = dict(Counter(isPrime3(j)))
+            zu = [k ** d1.get(k) for k in d1]
+            li += zu
+
+        if len(set(li)) == 16:
+            return "It's", i
+
+#Project Euler No.48
+'''
+自幂
+
+十项的自幂级数求和为 1¹ + 2² + 3³ + … + 10[10次方] = 10405071317。
+
+求如下一千项的自幂级数求和的最后10位数字：1¹ + 2² + 3³ + … + 1000[1000次方]。
+
+return str(sum([i**i for i in range(1, 1001)]))[-10::]
+'''
+def No_48_Self_Powers():
+    n = 1
+    for i in range(2, 1001):
+        n += i**i
+    return str(n)[-10::]
+
+#Project Euler No.49
+'''
+素数重排
+
+公差为3330的三项等差序列1487、4817、8147在两个方面非常特别：其一，每一项都是素数；其二，两两都是重新排列的关系。
+
+一位素数、两位素数和三位素数都无法构成满足这些性质的数列，但存在另一个由四位素数构成的递增序列也满足这些性质。
+
+将这个数列的三项连接起来得到的12位数是多少？
+'''
+
+def No_49_Prime_Permutations():
+    prime_list = [i for i in range(10 ** 3, 10 ** 4) if isPrime2(i)]
+    lis, result_num = [], ""
+    for j in prime_list:
+        if j + 3330 in prime_list and j + 6660 in prime_list and sorted(str(j)) == sorted(str(j + 3330)) == sorted(str(j + 6660)):
+            lis.append([j, j + 3330, j + 6660])
+    if len(lis) == 2:
+        lis.remove([1487, 4817, 8147])
+        for num in lis[0]:
+            result_num += str(num)
+        return int(result_num)
+
+#Project Euler No.50
+'''
+连续素数的和
+
+素数41可以写成六个连续素数的和：
+
+41 = 2 + 3 + 5 + 7 + 11 + 13
+在小于一百的素数中，41能够被写成最多的连续素数的和。
+
+在小于一千的素数中，953能够被写成最多的连续素数的和，共包含连续21个素数。
+
+在小于一百万的素数中，哪个素数能够被写成最多的连续素数的和？
+'''
+def No_50_Consecutive_Prime_sum(num=10**6):
+    million_list = Prime_list(num)
+    primes_list = [x for x in million_list if x < 10000]  # 只要最小的这部分值，因为连加以后可能超出100W
+    primes_set = set(million_list)  # 在set里面查询会快很多
+
+    for length in range(len(primes_list), 0, -1):  # 反过来，先取最大的数字
+        for i in range(0, len(primes_list)-length+1):  # 补位，为下面的截取解决问题[逐渐缩小范围]
+            sum_nums = sum(primes_list[i: i+length])  # 截取此段值加总[i 到 length的范围]往最大值靠拢
+            if sum_nums > num:  # 如果这个和大于100W，则length个列表里的数相加不成立
+                break
+            elif sum_nums in primes_set:  # 如果这个数字小于100W，而且在列表中，就是这个数
+                return sum_nums, i, i+length
+        pass  # 如果这个数字小于100W，但是不在列表内[非质数]，则i+1
+'''
+def No_50_Consecutive_Prime_sum(num=10**6):
+    million_list = Prime_list(num) # 质数列表
+    max_len = 1
+    prime_max_len = 2
+    for inx, prime in enumerate(million_list):  # 从列表调出值和对应的索引
+        print("inx, prime", inx, prime)
+        primes_ele = million_list[0: max_len]  # 在prime_list截取一段值
+        print("截取million_list的0到",max_len)
+        primes_sum = sum(primes_ele)  # 求出这段值的和
+        print("max_len, inx:",max_len, inx)
+        for j in range(max_len, inx):  # 遍历max_len和索引之间的整数
+            print("j,million_list[j]", j, million_list[j])
+            primes_ele.append(million_list[j])  # 把prime_list[j]的值放到primes_ele
+            print("primes_sum", primes_sum)
+            primes_sum += million_list[j]  # primes_sum加上prime_list[j]的值
+            print("开始循环")
+            print("primes_sum, prime", primes_sum, prime)
+            while primes_sum > prime:  # 当primes_sum大于当前索引上prime_list的值
+                print("len(primes_ele), max_len + 1", len(primes_ele), max_len + 1)
+                if len(primes_ele) <= max_len + 1:  # 如果primes_ele里面的数字数量小于等于max_len+1 则打断
+                    print("打断")
+                    break
+                print("primes_sum, primes_ele[0]", primes_sum, primes_ele[0])
+                primes_sum -= primes_ele[0]  # 把和减去primes_ele里面第一个数
+                primes_ele.pop(0)  # 同时弹出primes_ele第一个数
+            print("结束循环")
+            print("primes_sum, prime", primes_sum, prime)
+            if primes_sum >= prime:  # 循环完毕，如果primes_sum大于等于当前索引上的值 则打断
+                print("打断")
+                break
+        print("primes_sum, prime", primes_sum, prime)    
+        if primes_sum == prime:  # 当for循环完毕，如果相等
+            print("len(primes_ele), max_len", len(primes_ele), max_len)
+            if len(primes_ele) > max_len:  # 则判断数字量哪个大 如果primes_ele的数字多
+                max_len = len(primes_ele)  # max_len的值变成len(primes_ele)
+                prime_max_len = prime  # prime_max_len变成这个质数
+                print("max_len, prime_max_len", max_len, prime_max_len)
+    return prime_max_len, max_len
+'''
