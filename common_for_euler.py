@@ -48,7 +48,7 @@ def is_palindrome(n):  # 回文检测
     return str(n) == str(n)[::-1]
 
 
-def Prime_list(n, f=0):  # 返回N以内所有的素数
+def prime_list(n, f=0):  # 返回N以内所有的素数
     l_result = [True] * n  # 占位 预留True
     l_result[0], l_result[1] = False, False  # 去掉1,0
     for i in range(0, n):
@@ -58,7 +58,7 @@ def Prime_list(n, f=0):  # 返回N以内所有的素数
     return [k for k, v in enumerate(l_result) if v and k >= f]  # 返回处理后的列表
 
 
-def Not_Prime_list(n, f=0):  # 返回N以内所有的非素数
+def not_prime_list(n, f=0):  # 返回N以内所有的非素数
     l_result = [True] * n  # 占位 预留True
     l_result[0], l_result[1] = False, False  # 去掉1,0
     for i in range(0, n):

@@ -2038,7 +2038,7 @@ def No_49_Prime_Permutations():
 
 
 def No_50_Consecutive_Prime_sum(num=10 ** 6):
-    million_list = common_for_euler.Prime_list(num)
+    million_list = common_for_euler.prime_list(num)
     primes_list = [x for x in million_list if x < 10000]  # 只要最小的这部分值，因为连加以后可能超出100W
     primes_set = set(million_list)  # 在set里面查询会快很多
 
