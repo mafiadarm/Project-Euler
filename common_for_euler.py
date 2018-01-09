@@ -1,6 +1,8 @@
-""" encode=utf-8 """
+# -- coding = utf-8 --
 
-''' 以下为常用函数 '''
+"""
+以下为常用函数
+"""
 
 
 def __init__():
@@ -80,3 +82,45 @@ def replace_same_digital(original_number, replace_number_list):  # 传入一个�
             else:
                 replaced[sre_num] = {int(str(original_number).replace(sre_num, str(replace_number)))}
     return replaced  # 返回标记有重复数字为key和修改好的重复数字集合为value的字典
+
+
+def poker_soccer(poker_num, poker_fol):  # 判断规则详见054
+    from collections import Counter
+    point_dict = {j: i for i, j in enumerate("23456789abcdeSHDC", 2)}
+    for char, letter in (("A", "e"), ("K", "d"), ("Q", "c"), ("J", "b"), ("T", "a")):
+        poker_num = poker_num.replace(char, letter)
+
+    lis = sorted(poker_num)  # 牌面
+    lip = sorted(poker_fol)  # 花色
+    poker_num_count = Counter(lis)
+    if len(set(lip)) == 1:
+        if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]) and lis[-1] == "A":
+            soccer = point_dict.get(lip[0]) * 10 ** 9
+        elif point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
+            soccer = point_dict.get(lis[-1]) * 10 ** 8 + point_dict.get(lip[0])
+        else:
+            soccer = point_dict.get(lis[-1]) * 10 ** 5
+    elif len(set(lip)) > 1:
+        if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
+            soccer = point_dict.get(lis[-1]) * 10 ** 4
+        else:
+            soccer = point_dict.get(lis[-1])
+    else:
+        try:
+            four = max([i for i in poker_num_count if poker_num_count.get(i) == 4])
+            soccer = point_dict.get(four) * 10 ** 7
+        except ValueError:
+            try:
+                three = max([i for i in poker_num_count if poker_num_count.get(i) == 3])
+                try:
+                    max([i for i in poker_num_count if poker_num_count.get(i) == 2])
+                    soccer = point_dict.get(three) * 10 ** 6
+                except ValueError:
+                    soccer = point_dict.get(three) * 10 ** 3
+            except ValueError:
+                two = max([i for i in poker_num_count if poker_num_count.get(i) == 2])
+                if min([i for i in poker_num_count if poker_num_count.get(i) == 2]) != two:
+                    soccer = point_dict.get(two) * 10 ** 2
+                else:
+                    soccer = point_dict.get(two) * 10 ** 1
+    return soccer

@@ -1,7 +1,9 @@
-# -- coding = utf-8 -- version 3.6
+# -- coding = utf-8 --
+# # python version 3.6
+import common_for_euler
 # Project Euler No.1
 # 第一次体会到算法的差别有多大
-import common_for_euler
+
 """
 3的倍数和5的倍数
 如果我们列出10以内所有3或5的倍数，我们将得到3、5、6和9，这些数的和是23。
@@ -2051,6 +2053,7 @@ def No_50_Consecutive_Prime_sum(num=10 ** 6):
                 return sum_nums, i, i + length
         pass  # 如果这个数字小于100W，但是不在列表内[非质数]，则i+1
 
+
 '''
 def No_50_Consecutive_Prime_sum(num=10**6):
     million_list = Prime_list(num) # 质数列表
@@ -2092,35 +2095,4 @@ def No_50_Consecutive_Prime_sum(num=10**6):
     return prime_max_len, max_len
 '''
 
-# Project Euler No.51
-'''
-素数数字替换
 
-将两位数*3的第一个数字代换为任意数字，在九个可能值中有六个是素数：13、23、43、53、73和83。
-
-将五位数56**3的第三和第四位数字代换为相同的任意数字，就得到了十个可能值中有七个是素数的最小例子，这个素数族是：56003、56113、56333、56443、56663、56773和56993。56003作为这一族中最小的成员，也是最小的满足这个性质的素数。
-
-通过将部分数字（不一定相邻）代换为相同的任意数字，有时能够得到八个素数，求满足这一性质的最小素数。
-
-在一个范围内找
-
-'''
-
-
-def No_51_Prime_Digit_replacements(num=10000):
-    while True:
-        num *= 10
-        bool_list = [True] * num
-        bool_list[0], bool_list[1] = False, False
-        for i, prime in enumerate(bool_list):
-            if prime:
-                for j in range(i * i, num, i):
-                    bool_list[j] = False
-
-        prime_list = [k for k, prime_num in enumerate(bool_list) if prime_num and len(set(str(k))) < len(str(k))]
-
-        for the_num in prime_list:
-            check_dict = common_for_euler.replace_same_digital(the_num, list(range(10)))
-            for key in check_dict:
-                if len([n for n in check_dict[key] if bool_list[n] and len(str(n)) == len(str(the_num))]) == 8:
-                    return the_num
