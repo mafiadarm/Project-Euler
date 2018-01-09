@@ -94,7 +94,7 @@ def poker_soccer(poker_num, poker_fol):  # 判断规则详见054
     lip = sorted(poker_fol)  # 花色
     poker_num_count = Counter(lis)
     if len(set(lip)) == 1:
-        if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]) and lis[-1] == "A":
+        if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]) and point_dict.get(lis[-1]) == 14:
             soccer = point_dict.get(lip[0]) * 10 ** 9
         elif point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
             soccer = point_dict.get(lis[-1]) * 10 ** 8 + point_dict.get(lip[0])
