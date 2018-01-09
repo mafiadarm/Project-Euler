@@ -216,10 +216,10 @@ except ValueError: # 如果没有四个相同的
                 soccer = int(three)*10**3
     except ValueError: # 如果没有三个相同的
         two = 查看2个相同的
-        if 还有另外2个相同:
+        if 还有另外2个相同: 则加上最后那张单牌
             soccer = int(two)*10**2
-        else: 没有另外2个相同:
-            soccer = int(two)*10**1
+        else: 没有另外2个相同: 如果两边都相同，则加上最大的单牌
+            soccer = int(two)*10**1 + int(max([i for i in poker_num_count if poker_num_count.get(i) == 1]))
 
 try:
     four = max([i for i in Counter(lis) if Counter(lis).get(i)==4])
@@ -234,10 +234,11 @@ except ValueError:
             soccer = point_dict.get(three)*10**3
     except ValueError:
         two = max([i for i in Counter(lis) if Counter(lis).get(i)==2])
+        one = max([i for i in Counter(lis) if Counter(lis).get(i)==1])
         if min([i for i in Counter(lis) if Counter(lis).get(i)==2]) != two:
-            soccer = point_dict.get(two)*10**2
+            soccer = point_dict.get(two)*10**2 + Counter(lis).get(one)
         else:
-            soccer = point_dict.get(two)*10**1
+            soccer = point_dict.get(two)*10**1 + Counter(lis).get(one)
 
 '''
 def No_54_Poker_hands():
@@ -335,3 +336,56 @@ def No_57_Square_root_convergents():
         if len(str(li[0])) > len(str(li[1])):
             count += 1
     return count
+
+# Project Euler No.58
+'''
+螺旋素数
+从1开始逆时针螺旋着摆放自然数，我们可以构造出一个边长为7的螺旋数阵。
+
+37 36 35 34 33 32 31
+38 17 16 15 14 13 30
+39 18  5  4  3 12 29
+40 19  6  1  2 11 28
+41 20  7  8  9 10 27
+42 21 22 23 24 25 26
+43 44 45 46 47 48 49
+可以发现，所有的奇数平方都在这个螺旋方针的右下对角线上，更有趣的是，在所有对角线上一共有8个素数，比例达到8/13 ≈ 62%。
+
+在这个方阵外面完整地再加上一层，就能构造出一个边长为9的螺旋方阵。如果不断重复这个过程，当对角线上素数的比例第一次低于10%时，螺旋数阵的边长是多少？
+'''
+def No_58_Spiral_primes():
+    side_large = 1
+    interval = 2
+    count_prime = 0
+    count_spiral = 1
+    while True:
+        side_large += 2
+        count_spiral += 4
+        for j in range(1, 4):
+            if common_for_euler.isPrime2(side_large**2 - interval*j):
+                count_prime += 1
+        if count_prime/count_spiral < 0.1:
+            return side_large
+        interval += 2
+
+# Project Euler No.59
+'''
+异或解密
+
+计算机上的每个字符都被指定了一个独特的代码，其中被广泛使用的一种是ASCII码（美国信息交换标准代码）。例如，大写字母A = 65，
+星号（*） = 42，小写字母k = 107。
+
+一种现代加密方法是将一个文本文档中的符号先转化为ASCII码，然后将每个字节异或一个根据密钥确定的值。使用异或进行加密的好处
+在于，只需对密文使用相同的密钥再加密一次就能得到明文，例如，65 XOR 42 = 107，而107 XOR 42 = 65。
+
+为了使加密难以破解，密钥要和明文一样长，由随机的字节构成。用户会把加密过的信息和密钥放置在不同的地方，解密时二者缺一不可。
+
+不幸的是，这种方法对大多数人来说并不实用，因此一个略有改进的方法是使用一个密码作为密钥。密码的长度很有可能比信息要短，这
+时候就循环重复使用这个密码进行加密。这种方法需要达到一种平衡，一方面密码要足够长才能保证安全，另一方面需要充分短以方便记
+忆。
+
+你的破解任务要简单得多，因为密钥只由三个小写字母构成。文本文档cipher.txt（右击并选择“目标另存为……”）中包含了加密后的
+ASCII码，并且已知明文包含的一定是常见的英文单词，解密这条消息并求出原文的ASCII码之和。
+'''
+def No_59_XOR_decryption():
+    pass

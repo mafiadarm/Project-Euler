@@ -95,32 +95,32 @@ def poker_soccer(poker_num, poker_fol):  # 判断规则详见054
     poker_num_count = Counter(lis)
     if len(set(lip)) == 1:
         if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]) and point_dict.get(lis[-1]) == 14:
-            soccer = point_dict.get(lip[0]) * 10 ** 9
+            return point_dict.get(lip[0]) * 10 ** 9
         elif point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
-            soccer = point_dict.get(lis[-1]) * 10 ** 8 + point_dict.get(lip[0])
+            return point_dict.get(lis[-1]) * 10 ** 8 + point_dict.get(lip[0])
         else:
-            soccer = point_dict.get(lis[-1]) * 10 ** 5
+            return point_dict.get(lis[-1]) * 10 ** 5
     elif len(set(lip)) > 1:
         if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
-            soccer = point_dict.get(lis[-1]) * 10 ** 4
+            return point_dict.get(lis[-1]) * 10 ** 4
         else:
-            soccer = point_dict.get(lis[-1])
+            return point_dict.get(lis[-1])
     else:
         try:
             four = max([i for i in poker_num_count if poker_num_count.get(i) == 4])
-            soccer = point_dict.get(four) * 10 ** 7
+            return point_dict.get(four) * 10 ** 7
         except ValueError:
             try:
                 three = max([i for i in poker_num_count if poker_num_count.get(i) == 3])
                 try:
                     max([i for i in poker_num_count if poker_num_count.get(i) == 2])
-                    soccer = point_dict.get(three) * 10 ** 6
+                    return point_dict.get(three) * 10 ** 6
                 except ValueError:
-                    soccer = point_dict.get(three) * 10 ** 3
+                    return point_dict.get(three) * 10 ** 3
             except ValueError:
                 two = max([i for i in poker_num_count if poker_num_count.get(i) == 2])
+                one = max([i for i in poker_num_count if poker_num_count.get(i) == 1])
                 if min([i for i in poker_num_count if poker_num_count.get(i) == 2]) != two:
-                    soccer = point_dict.get(two) * 10 ** 2
+                    return point_dict.get(two) * 10 ** 2 + point_dict.get(one)
                 else:
-                    soccer = point_dict.get(two) * 10 ** 1
-    return soccer
+                    return point_dict.get(two) * 10 ** 1 + point_dict.get(one)
