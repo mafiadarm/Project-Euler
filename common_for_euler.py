@@ -124,3 +124,15 @@ def poker_soccer(poker_num, poker_fol):  # 判断规则详见054
                     return point_dict.get(two) * 10 ** 2 + point_dict.get(one)
                 else:
                     return point_dict.get(two) * 10 ** 1 + point_dict.get(one)
+
+def x_shape_list(lamb_da, max_range, min_range=1):  # lamb_da= lambda x:公式 范例见061
+    lis = []
+    i = 0
+    while True:
+        i += 1
+        n = lamb_da(i)
+        if n < min_range:
+            continue
+        if n >= max_range:
+            return lis
+        lis.append(n)

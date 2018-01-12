@@ -35,6 +35,7 @@ def No_51_Prime_Digit_replacements(num=10000):
                 if len([n for n in check_dict[key] if bool_list[n] and len(str(n)) == len(str(the_num))]) == 8:
                     return the_num
 
+
 # Project Euler No.52
 '''
 重排的倍数
@@ -43,6 +44,7 @@ def No_51_Prime_Digit_replacements(num=10000):
 
 有些正整数x满足2x、3x、4x、5x和6x都拥有相同的数字，求其中最小的正整数。
 '''
+
 
 def No_52_Permuted_multiples():
     overlay = 0
@@ -53,6 +55,7 @@ def No_52_Permuted_multiples():
             num_set.add("".join(sorted(str(overlay * i))))
         if len(num_set) == 2:
             return overlay
+
 
 # Project Euler No.53
 '''
@@ -74,6 +77,7 @@ nCr=n!/(r!(n−r)!)
 若数值相等形式不同也视为不同，对于1 ≤ n ≤ 100，有多少个组合数nCr超过一百万？
 '''
 
+
 def No_53_Combinatoric_selections():
     from math import factorial
     num = 0
@@ -82,6 +86,7 @@ def No_53_Combinatoric_selections():
             if factorial(i) / (factorial(j) * factorial(i - j)) > 1000000:
                 num += 1
     return num
+
 
 # Project Euler No.54
 '''
@@ -241,6 +246,8 @@ except ValueError:
             soccer = point_dict.get(two)*10**1 + Counter(lis).get(one)
 
 '''
+
+
 def No_54_Poker_hands():
     win = 0
     with open(r"C:\\Users\lo\Documents\GitHub\Project Euler\p054_poker.txt", "r") as rr:
@@ -250,9 +257,11 @@ def No_54_Poker_hands():
             p1_poker_fol = ll[1] + ll[4] + ll[7] + ll[10] + ll[13]
             p2_poker_num = ll[15] + ll[18] + ll[21] + ll[24] + ll[27]
             p2_poker_fol = ll[16] + ll[19] + ll[22] + ll[25] + ll[28]
-            if common_for_euler.poker_soccer(p1_poker_num, p1_poker_fol) > common_for_euler.poker_soccer(p2_poker_num, p2_poker_fol):
+            if common_for_euler.poker_soccer(p1_poker_num, p1_poker_fol) > common_for_euler.poker_soccer(p2_poker_num,
+                                                                                                         p2_poker_fol):
                 win += 1
     return win
+
 
 # Project Euler No.55
 '''
@@ -279,6 +288,8 @@ def No_54_Poker_hands():
 
 注意：2007年4月24日，题目略作修改，以强调目前利克瑞尔数理论的限制。
 '''
+
+
 def No_55_Lychrel_numbers():
     count = 0
     for i in range(1, 10000):
@@ -300,16 +311,19 @@ def No_55_Lychrel_numbers():
 
 若a, b < 100，所有能表示为a的b次方的自然数中，最大的各位数字和是多少？
 '''
+
+
 def No_56_Powerful_Digit_Sum():
     num = 0
     for a in range(100):
         for b in range(100):
             n = 0
-            for i in str(a**b):
+            for i in str(a ** b):
                 n += int(i)
             if num < n:
                 num = n
     return num
+
 
 # Project Euler No.57
 '''
@@ -328,14 +342,17 @@ def No_56_Powerful_Digit_Sum():
 
 在前一千个迭代展开式中，有多少个分数分子的位数多于分母的位数？
 '''
+
+
 def No_57_Square_root_convergents():
     li = [3, 2]
     count = 0
     for i in range(999):
-        li[0], li[1] = li[0]+li[1]*2, li[0]+li[1]
+        li[0], li[1] = li[0] + li[1] * 2, li[0] + li[1]
         if len(str(li[0])) > len(str(li[1])):
             count += 1
     return count
+
 
 # Project Euler No.58
 '''
@@ -353,6 +370,8 @@ def No_57_Square_root_convergents():
 
 在这个方阵外面完整地再加上一层，就能构造出一个边长为9的螺旋方阵。如果不断重复这个过程，当对角线上素数的比例第一次低于10%时，螺旋数阵的边长是多少？
 '''
+
+
 def No_58_Spiral_primes():
     side_large = 1
     interval = 2
@@ -362,11 +381,12 @@ def No_58_Spiral_primes():
         side_large += 2
         count_spiral += 4
         for j in range(1, 4):
-            if common_for_euler.isPrime2(side_large**2 - interval*j):
+            if common_for_euler.isPrime2(side_large ** 2 - interval * j):
                 count_prime += 1
-        if count_prime/count_spiral < 0.1:
+        if count_prime / count_spiral < 0.1:
             return side_large
         interval += 2
+
 
 # Project Euler No.59
 '''
@@ -387,5 +407,379 @@ def No_58_Spiral_primes():
 你的破解任务要简单得多，因为密钥只由三个小写字母构成。文本文档cipher.txt（右击并选择“目标另存为……”）中包含了加密后的
 ASCII码，并且已知明文包含的一定是常见的英文单词，解密这条消息并求出原文的ASCII码之和。
 '''
-def No_59_XOR_decryption():
-    pass
+
+'''
+因为是三个小写字母构成，所以密码是以三个字母为一组对整个密文进行对应匹配【三个字母是有序的】
+所以需要把整个密文拆成3份，第147...个字符为1组  第258...个字符为一组  第369...个字符为一组
+猜测整个字符表中最多的是空格，所以用空格的asc异或最多的asc码，得到三个key字母的asc
+重复排列key到和密文一样长，并且一一对应，然后用key去异或密文，得到的字母拼接起来
+'''
+
+
+def No_59_XOR_decryption(guess=32):
+    with open(r"C:\\Users\lo\Documents\GitHub\Project Euler\p059_cipher.txt", "r") as rr:
+        ll = rr.readline()
+    ll = [int(i) for i in ll.split(",")]  # 调整数据为列表
+    key = []
+    for i in range(3):  # 3是因为只有三个字母
+        depart = [x for x in ll[i::3]]  # 按3字节一循环分组
+        key.append(max(depart, key=depart.count))  # 把最多的重复的加入列表
+
+    key = [x ^ guess for x in key]  # 反转出key，32为猜测值（空格）
+    key_asc = key * int(len(ll) / 3)  # 复制密码循环和密文一样长
+    letter = [chr(x ^ y) for x, y in zip(ll, key_asc)]  # 一一匹配后 异或处理，用asc转为字母
+    cipher = "".join(letter)  # 拼接结果
+    asc_sum = sum([ord(x) for x in cipher])
+    return cipher, asc_sum
+
+
+# Project Euler No.60
+'''
+素数对的集合
+
+3、7、109和673是非常特别的一组素数。任取其中的两个并且以任意顺序连接起来，其结果仍然是个素数。例如，选择7和109，我们得到
+7109和1097均为素数。这四个素数的和是792，这是满足这个性质的一组四个素数的最小和。
+
+若有一组五个素数，任取其中的两个并且以任意顺序连接起来，其结果仍然是个素数，求这样一组素数的最小和。
+'''
+
+
+def No_60_Prime_pair_sets():
+    from itertools import combinations
+    lis = common_for_euler.prime_list(10000)
+    ll = []
+    for i in combinations(lis, 5):
+        flag = True
+        for o in combinations(i, 2):
+            num1 = int(str(o[0]) + str(o[1]))
+            num2 = int(str(o[1]) + str(o[0]))
+            if not common_for_euler.isPrime2(num1) or not common_for_euler.isPrime2(num2):
+                flag = False
+                break
+        if flag:
+            ll.append(sum(i))
+    return min(ll)
+
+
+'''
+from time import time
+from math import sqrt
+def getPrimes(N):
+    primes = [True] * N
+    primes[0], primes[1] = False, False
+    for i, prime in enumerate(primes):
+        if prime:
+            for j in range(i * i, N, i):
+                primes[j] = False
+    return [k for k, p in enumerate(primes) if p ]
+
+def isPrime(n, l_pr):
+    # 不考虑1
+    if n < 4:
+        return True
+    if n % 2 == 0 or n % 3 == 0 :
+        return False
+    t = int(sqrt(n))
+    for i in l_pr:
+        if i > t:
+            return True
+        if n % i == 0:
+            return False
+    return True
+def findNums(l_pr, l_primes, N, l_result):
+    if N == 1 and len(l_result) < 1:
+        l_result.append(min(l_primes)) 
+    else:
+        if len(l_result) < N:
+            findNums(l_pr, l_primes, N - 1, l_result)
+            for i in [x for x in l_primes if x > max(l_result)]:
+                flag = True
+                for j in l_result:
+                    if not (isPrime(int(str(j) + str(i)), l_pr)  
+                            and isPrime(int(str(i) + str(j)), l_pr)):
+                        flag = False
+                        break
+                if flag:
+                    l_result.append(i) 
+                    return          
+def euler060(N=10000):
+    l_primes = getPrimes(N)
+    l_result = [3]
+    l_pr = [x for x in l_primes]
+    findNums(l_pr, l_primes, 5, l_result)
+    while len(l_result) < 5:
+        l_primes = [i for i in l_pr if i > max(l_result)]
+        l_result.remove(max(l_result))
+        findNums(l_pr, l_primes, 5, l_result)
+    print(l_result)
+if __name__ == '__main__':
+    start = time() 
+    euler060()
+    print('cost %.6f sec' % (time() - start))
+'''
+
+# Project Euler No.61
+'''
+循环的多边形数
+
+三角形数、正方形数、五边形数、六边形数、七边形数和八边形数统称为多边形数。它们分别由如下的公式给出：
+
+ 	 	 
+三角形数	P3,n=n(n+1)/2	1, 3, 6, 10, 15, …   n = (num*2+0.5**2)**0.5-0.5
+正方形数	P4,n=n2	1, 4, 9, 16, 25, …           n = num**0.5
+五边形数	P5,n=n(3n−1)/2	1, 5, 12, 22, 35, …  n = (1+(1+num*4*3*2)**0.5)/6
+六边形数	P6,n=n(2n−1)	1, 6, 15, 28, 45, …  n = (1+(1+4*2*num)**0.5)/4
+七边形数	P7,n=n(5n−3)/2	1, 7, 18, 34, 55, …  n = (3+(9+4*5*2*num)**0.5)/10
+八边形数	P8,n=n(3n−2)	1, 8, 21, 40, 65, …  n = (2+(4+4*3*num)**0.5)/6
+由三个4位数8128、2882、8281构成的有序集有如下三个有趣的性质。
+
+这个集合是循环的，每个数的后两位是后一个数的前两位（最后一个数的后两位也是第一个数的前两位）。
+每种多边形数——三角形数（P3,127=8128）、正方形数（P4,91=8281）和五边形数（P5,44=2882）——在其中各有一个代表。
+这是唯一一个满足上述性质的4位数有序集。
+存在唯一一个包含六个4位数的有序循环集，每种多边形数——三角形数、正方形数、五边形数、六边形数、七边形数和八边形数——在其中各有一个代表。求这个集合的元素和。
+
+'''
+
+
+def No_61_Cyclical_figurate_numbers(min_num=1000, max_num=10000):
+    p3 = common_for_euler.x_shape_list(lambda n: n * (n + 1) // 2, max_num, min_num)
+    p4 = common_for_euler.x_shape_list(lambda n: n * n, max_num, min_num)
+    p5 = common_for_euler.x_shape_list(lambda n: n * (3 * n - 1) // 2, max_num, min_num)
+    p6 = common_for_euler.x_shape_list(lambda n: n * (2 * n - 1), max_num, min_num)
+    p7 = common_for_euler.x_shape_list(lambda n: n * (5 * n - 3) // 2, max_num, min_num)
+    p8 = common_for_euler.x_shape_list(lambda n: n * (3 * n - 2), max_num, min_num)
+    p_list = [p3, p4, p5, p6, p7, p8]
+    flag = [False] * 6
+
+    flag[-1] = True
+    for i in p8:
+        No_61_recursion([i], p_list, flag)
+
+
+def No_61_recursion(numbers, p_list, flag):
+    if len(numbers) == 6 and numbers[-1] % 100 == numbers[0] // 100:
+        return print(numbers, sum(numbers))
+
+    for i in range(6):
+        if flag[i]: continue  # 如果为真则跳过
+        flag[i] = True  # 标记此条列表已用，递归的时候也带进去
+        for j in p_list[i]:
+            if j // 100 == numbers[-1] % 100:
+                No_61_recursion(numbers + [j], p_list, flag)
+        flag[i] = False  # 如果在i里面没找到，重新标记为待用
+
+
+# Project Euler No.62
+'''
+立方数重排
+
+立方数41063625（345的3次方）可以重排为另外两个立方数：56623104（384的3次方）和66430125（405的3次方）。实际上，41063625是重排中恰好有三个立方数的最小立方数。
+
+求重排中恰好有五个立方数的最小立方数。
+'''
+
+
+def No_62_Cubic_permutations():
+    aa = 1
+    while True:
+        aa *= 10
+        print(aa)
+        ll = ["".join(sorted(str(i ** 3))) for i in range(1, aa)]
+        cc = max(ll, key=ll.count)
+        if ll.count(cc) == 5:
+            return (ll.index(cc) + 1) ** 3
+
+
+# Project Euler No.63
+'''
+幂次与位数
+
+五位数16807=7的5次方 同时也是一个五次幂。同样的，九位数134217728=8的9次方 同时也是九次幂。
+
+有多少个n位正整数同时也是n次幂？
+
+范围会在10的10次方以内
+a = 1
+while True:
+    a += 1
+    if len(str(a**a)) > a:
+        break
+'''
+
+
+def No_63_Powerful_digit_counts():
+    count = 0
+    for i in range(1, 11):
+        for j in range(1, 11):
+            if len(str(i ** j)) == j:
+                count += 1
+    return count
+
+# Project Euler No.63
+'''
+奇周期平方根
+
+所有的平方根写成如下连分数表示时都是周期性重复的：
+
+N−−√=a0+1a1+1a2+1a3+…
+N=a0+1a1+1a2+1a3+…
+例如，让我们考虑√23：
+
+23−−√=4+23−−√−4=4+1123√−4=4+11+23√−37
+23=4+23−4=4+1123−4=4+11+23−37
+如果我们继续这个过程，我们会得到如下的展开：
+
+N−−√=4+11+13+11+18+…
+N=4+11+13+11+18+…
+这个过程可以总结如下：
+
+a0=4, 123−−√−4=23−−√+47=1+23−−√−37
+a0=4, 123−4=23+47=1+23−37
+
+a1=1, 723−−√−3=7(23−−√+3)14=3+23−−√−32
+a1=1, 723−3=7(23+3)14=3+23−32
+
+a2=2, 223−−√−3=2(23−−√+3)14=1+23−−√−47
+a2=2, 223−3=2(23+3)14=1+23−47
+
+a3=1, 723−−√−4=7(23−−√+4)7=8+23−−√−4
+a3=1, 723−4=7(23+4)7=8+23−4
+
+a4=8, 123−−√−4=23−−√+47=1+23−−√−37
+a4=8, 123−4=23+47=1+23−37
+
+a5=1, 723−−√−3=7(23−−√+3)14=3+23−−√−32
+a5=1, 723−3=7(23+3)14=3+23−32
+
+a6=3, 223−−√−3=2(23−−√+3)14=1+23−−√−47
+a6=3, 223−3=2(23+3)14=1+23−47
+
+a7=1, 723−−√−4=7(23−−√+4)7=8+23−−√−4
+a7=1, 723−4=7(23+4)7=8+23−4
+可以看出序列正在重复。我们将其简记为√23 = [4;(1,3,1,8)]，表示在此之后(1,3,1,8)无限循环。
+
+前10个（无理数）平方根的连分数表示是：
+
+√2=[1;(2)]，周期=1
+√3=[1;(1,2)]，周期=2
+√5=[2;(4)]，周期=1
+√6=[2;(2,4)]，周期=2
+√7=[2;(1,1,1,4)]，周期=4
+√8=[2;(1,4)]，周期=2
+√10=[3;(6)]，周期=1
+√11=[3;(3,6)]，周期=2
+√12= [3;(2,6)]，周期=2
+√13=[3;(1,1,1,1,6)]，周期=5
+
+在N ≤ 13中，恰好有4个连分数表示的周期是奇数。
+
+在N ≤ 10000中，有多少个连分数表示的周期是奇数？
+'''
+def No_64_Odd_period_square_roots():  # 诸多不理解的地方，以后研究
+    import math
+    ans = 0
+    for i in range(1, 10001):
+
+        m = int(math.sqrt(i))
+        if m * m == i:
+            continue
+
+        dic = {}
+        a = i
+        b = -m
+        c = 1
+        count = 0
+        while True:
+            nc = a - b * b
+            nc /= c
+            nd = int((math.sqrt(a) - b) / nc)
+            nb = -b - nd * nc
+            t = (nb, nc, nd)
+            b = nb
+            c = nc
+            if t not in dic:
+                count += 1
+                dic[t] = 1
+            else:
+                break
+
+        if count % 2 != 0:
+            ans += 1
+    return ans
+'''
+暴力破解
+import decimal as dc
+dc.getcontext().prec = 250
+def root(n):
+    blist = []
+    n0 = dc.Decimal(i).sqrt()
+    a0 = int(n0)
+    b0 = n0 - a0
+    n1 = 1/b0
+    a1 = int(n1)
+    b1 = n1 - a1
+    while str(b1)[:11] not in blist:
+        blist.append(str(b1)[:11])
+        n1 = 1/b1
+        a1 = int(n1)
+        b1 = n1 - a1
+    return len(blist)
+
+count = 0
+for i in range(2,10000):
+    if i**0.5 != int(i**0.5):
+        if root(i) % 2 == 1:
+            count += 1
+print (count)
+'''
+
+
+# Project Euler No.63
+'''
+e的有理逼近
+2的算术平方根可以写成无限连分数的形式。
+
+2–√=1+12+12+12+12+…
+2=1+12+12+12+12+…
+这个无限连分数可以简记为√2 = [1;(2)]，其中(2)表示2无限重复。同样的，我们可以记√23 = [4;(1,3,1,8)]。
+
+可以证明，截取算术平方根连分数表示的一部分所组成的序列，给出了一系列最佳有理逼近值。让我们来考虑√2的逼近值：
+
+1+12=32
+1+12=32
+
+1+12+12=75
+1+12+12=75
+
+1+12+12+12=1712
+1+12+12+12=1712
+
+1+12+12+12+12=4129
+1+12+12+12+12=4129
+因此√2的前十个逼近值为：
+
+1, 3/2, 7/5, 17/12, 41/29, 99/70, 239/169, 577/408, 1393/985, 3363/2378, …
+
+最令人惊讶的莫过于重要的数学常数e有如下连分数表示
+e = [2; 1,2,1, 1,4,1, 1,6,1 , … , 1,2k,1, …]。
+
+e的前十个逼近值为：
+
+2, 3, 8/3, 11/4, 19/7, 87/32, 106/39, 193/71, 1264/465, 1457/536, …
+
+第10个逼近值的分子各位数字之和为1+4+5+7=17。
+
+求e的第100个逼近值的分子各位数字之和。
+'''
+def No_65_Convergents_of_e():
+    k = []
+    for i in range(int(100/3)+1):
+        k.append(1)
+        k.append(2 * i + 2)
+        k.append(1)
+
+    e_value = [2, 3]
+    for j in range(2, 100):
+        e_value.append(e_value[j - 1] * k[j - 1] + e_value[j - 2])
+
+    return sum([int(i) for i in str(e_value[99])])
