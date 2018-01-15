@@ -615,7 +615,8 @@ def No_63_Powerful_digit_counts():
                 count += 1
     return count
 
-# Project Euler No.63
+
+# Project Euler No.64
 '''
 奇周期平方根
 
@@ -675,6 +676,8 @@ a7=1, 723−4=7(23+4)7=8+23−4
 
 在N ≤ 10000中，有多少个连分数表示的周期是奇数？
 '''
+
+
 def No_64_Odd_period_square_roots():  # 诸多不理解的地方，以后研究
     import math
     ans = 0
@@ -706,6 +709,8 @@ def No_64_Odd_period_square_roots():  # 诸多不理解的地方，以后研究
         if count % 2 != 0:
             ans += 1
     return ans
+
+
 '''
 暴力破解
 import decimal as dc
@@ -733,8 +738,7 @@ for i in range(2,10000):
 print (count)
 '''
 
-
-# Project Euler No.63
+# Project Euler No.65
 '''
 e的有理逼近
 2的算术平方根可以写成无限连分数的形式。
@@ -771,9 +775,11 @@ e的前十个逼近值为：
 
 求e的第100个逼近值的分子各位数字之和。
 '''
+
+
 def No_65_Convergents_of_e():
     k = []
-    for i in range(int(100/3)+1):
+    for i in range(int(100 / 3) + 1):
         k.append(1)
         k.append(2 * i + 2)
         k.append(1)
@@ -783,3 +789,174 @@ def No_65_Convergents_of_e():
         e_value.append(e_value[j - 1] * k[j - 1] + e_value[j - 2])
 
     return sum([int(i) for i in str(e_value[99])])
+
+
+# Project Euler No.66
+'''
+丢番图方程
+考虑如下形式的二次丢番图方程：
+
+x² – Dy² = 1
+举例而言，当D=13时，x的最小值出现在649² – 13×180² = 1。
+
+可以断定，当D是平方数时，这个方程不存在正整数解。
+
+对于D= {2, 3, 5, 6, 7}分别求出x取最小值的解，我们得到：
+
+3² – 2×2² = 1
+2² – 3×1² = 1
+9² – 5×4² = 1
+5² – 6×2² = 1
+8² – 7×3² = 1
+
+因此，对于所有D ≤ 7，当D=5时x的最小值最大。
+
+对于D ≤ 1000，求使得x的最小值最大的D值。
+'''
+
+
+def No_66_Diophantine_equation():  # 估计会遍历几天吧
+    lis = [n for n in range(1001) if not n ** 0.5 % 1 == 0]
+    count = {0}
+    for i in lis:
+        y = 0
+        while True:
+            y += 1
+            x = (y ** 2 * i + 1) ** 0.5
+            if x % 1 == 0:
+                count.add(x)
+                break
+    return max(count)
+
+
+'''
+觉得速度太慢，就用线程池来high了  结果 x = 2178548422
+from multiprocessing.dummy import Pool
+
+p = Pool(100)
+
+lis = [d for d in range(1001) if not d**0.5 % 1 == 0]
+count = []
+
+def ss(i):
+    y = 0
+    while True:
+        y += 1
+        x = (y**2*i+1)**0.5
+        if x % 1 == 0:
+            print(i)
+            count.append(x)
+            break
+
+for i in lis:
+    p.apply_async(ss, args=(i,))
+
+p.close()
+p.join()
+'''
+
+'''
+用数学的方法 瞬间出结果
+x_max = 0
+D_res = 0
+
+for D in range(2, 1001):
+    root = int(pow(D, 0.5))
+    if root * root == D:
+        continue
+
+    m = 0
+    d = 1
+    a = root
+
+    x_m1 = 1
+    x = a
+
+    y_m1 = 0
+    y = 1
+
+    while x ** 2 - D * y ** 2 != 1:
+        m -= d * a - m
+        d //= (D - m * m)
+        a //= (root + m)
+
+        x_m2 = x_m1
+        x_m1 = x
+        y_m2 = y_m1
+        y_m1 = y
+
+        x = a * x_m1 + x_m2
+        y = a * y_m1 + y_m2
+
+    if x > x_max:
+        x_max = x
+        D_res = D
+        
+print(D_res)
+'''
+
+# Project Euler No.67
+'''
+最大路径和 II
+
+从下面展示的三角形的顶端出发，不断移动到在下一行与其相邻的元素，能够得到的最大路径和是23。
+
+3
+7 4
+2 4 6
+8 5 9 3
+如上图，最大路径和为 3 + 7 + 4 + 9 = 23。
+
+在这个15K的文本文件triangle.txt（右击并选择“目标另存为……”）中包含了一个一百行的三角形，求从其顶端出发到达底部，所能够得到的最大路径和。
+
+注意：这是第18题的强化版。由于总路径一共有299条，穷举每条路经来解决这个问题是不可能的！即使你每秒钟能够检查一万亿（1012）条路径，全部检查完也需要两千万年。存在一个非常高效的算法能解决这个问题。;o)
+'''
+
+
+def No_67_Maximum_path_sum_II():
+    with open("P067_triangle.txt", "r") as rr:
+        li = rr.readlines()
+    tri = [i.replace("\n", "").split() for i in li]
+
+    for i in range(1, len(tri)):
+        count_last_line = len(tri[-(i + 1)])
+        tri[-(i + 1)] = [max(int(tri[-i][j]) + int(tri[-(i + 1)][j]), int(tri[-i][j + 1]) + int(tri[-(i + 1)][j])) for j
+                         in range(count_last_line)]
+    return print(tri[0][0])
+
+
+# Project Euler No.68
+'''
+魔力五边形环
+
+考虑下面这个“魔力”三角形环，在其中填入1至6这6个数，每条线上的三个数加起来都是9。
+
+
+从最外侧结点所填的数最小的线（在这个例子中是4,3,2）开始，按顺时针方向，每个解都能被唯一表述。例如，上面这个解可以记作解集：4,3,2; 6,2,1; 5,1,3。
+
+将环填满后，每条线上的总和一共有四种可能：9、10、11和12。总共有8种填法：
+
+总和	解集
+9	4,2,3; 5,3,1; 6,1,2
+9	4,3,2; 6,2,1; 5,1,3
+10	2,3,5; 4,5,1; 6,1,3
+10	2,5,3; 6,3,1; 4,1,5
+11	1,4,6; 3,6,2; 5,2,4
+11	1,6,4; 5,4,2; 3,2,6
+12	1,5,6; 2,6,4; 3,4,5
+12	1,6,5; 3,5,4; 2,4,6
+把解集中的数字连接起来，可以构造一个9位数字串；对于三角形环来说，最大的数字串是432621513。
+
+在如下的“魔力”五边形环中，在其中填入1至10这10个数，根据不同的填写方式，可以组成16位或17位数字串。在“魔力”五边形环中，最大的16位数字串是多少？
+'''
+
+def No_68_Magic_5_gon_ring():
+    from itertools import permutations
+    num = 0
+    for i in permutations(range(1, 11)):
+        if i[0] == 6 and not {10, 9, 8, 7, 6} & set(i[5:]):
+            x = list(i)
+            if sum(x[:1] + x[5:7]) == sum(x[1:2] + x[6:8]) == sum(x[2:3] + x[7:9]) == sum(x[3:4] + x[8:]) == sum(x[4:5] + x[9:] + x[5:6]):
+                y = x[:1] + x[5:7] + x[1:2] + x[6:8] + x[2:3] + x[7:9] + x[3:4] + x[8:] + x[4:5] + x[9:] + x[5:6]
+                num = max(num, int("".join([str(k) for k in y])))
+    return num
