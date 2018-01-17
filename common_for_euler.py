@@ -8,6 +8,14 @@
 def __init__():
     pass
 
+def per_com(num_range, amount):
+    from math import factorial
+    per = int(factorial(num_range)/factorial(num_range-amount))
+    com = int(factorial(num_range)/(factorial(amount)*factorial(num_range-amount)))
+    chara_per = "If use permutations {}".format(per)
+    chara_com = "If use combinations {}".format(com)
+    print(chara_per.ljust(30, " "))
+    print(chara_com.ljust(30, " "))
 
 def isPrime2(n):  # 短除法，验证列表内的数字是否是质数
     if int(n ** 0.5) ** 2 != n and n != 1 and n != 0:
@@ -15,7 +23,6 @@ def isPrime2(n):  # 短除法，验证列表内的数字是否是质数
             if n % i == 0:
                 return False
         return True
-
 
 def isPrime_factor(n):  # 列出所有质因子，如果传1进去，列表会是空值
     li, f = [], 2
@@ -29,11 +36,15 @@ def isPrime_factor(n):  # 列出所有质因子，如果传1进去，列表会�
     return li
 
 
-def common_Divisor(x, y, z, li):  # 求公约数
+def common_Divisor(x, y, z, li):  # 最小公倍数 详见 005
     while y:
         x, y = y, x % y
     return li.append(z / x * li[-1] / x * x)
 
+def gys(x, y):  # 求x,y的最大公约数
+    while y:
+        x, y = y, x % y
+    return x
 
 def cycles(x):  # 循环节
     a, lis = 1, []

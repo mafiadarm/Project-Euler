@@ -1035,7 +1035,7 @@ for i in range(1,10**6+1):
 
 8319823 跑了好久，终于出来了
 
-用上题的思路，本题的分解质因子的集合越少，最好是n=2个质因子相乘[因为肯定不是质数]
+用69题的思路，本题的分解质因子的集合越少，最好是n=2个质因子相乘[因为肯定不是质数]
 '''
 def No_70_Totient_permutation(max_range=10**7):
     lis = common_for_euler.prime_list(int(max_range / 2), 2)  # 要保证2*最大质数 刚好在范围内
@@ -1056,3 +1056,115 @@ def No_70_Totient_permutation(max_range=10**7):
                 break
     return num
 
+
+# Project Euler No.71
+'''
+有序分数
+
+考虑形如n/d的分数，其中n和d均为正整数。如果n < d且其最大公约数为1，则该分数称为最简真分数。
+
+如果我们将d ≤ 8的最简真分数构成的集合按大小升序列出，我们得到：
+
+1/8, 1/7, 1/6, 1/5, 1/4, 2/7, 1/3, 3/8, 2/5, 3/7, 1/2, 4/7, 3/5, 5/8, 2/3, 5/7, 3/4, 4/5, 5/6, 6/7, 7/8
+可以看出2/5是3/7直接左邻的分数。
+
+将所有d ≤ 1,000,000的最简真分数按大小升序排列，求此时3/7直接左邻的分数的分子。
+
+分母小于等于100W，无限接近 3/7 的真分数的分子[小于3/7]
+
+分子和分母 互质
+
+猜测 范围固定在 40w/100w < x < 50w/100w 所以就10w个数字
+
+从大到小的递减
+分子分母增加或者减少1 并且检测是否是互质[最大公约数为1]，低于3/7的加入列表
+比较最大数
+
+'''
+
+def No_71_Ordered_ractions(num=10**6):
+    x = d = num
+    f = {}
+    while d > 0:
+        while x / d >= 3 / 7:
+            x -= 1
+
+        while x / d < 3 / 7:
+            if common_for_euler.gys(x, d) == 1:
+                f[x, d] = x / d
+            d -= 1
+            if not d:
+                break
+    return max(f, key=f.get)[0]
+
+# Project Euler No.72
+'''
+分数计数
+
+考虑形如n/d的分数，其中n和d均为正整数。如果n < d且其最大公约数为1，则该分数称为最简真分数。
+
+如果我们将d ≤ 8的最简真分数构成的集合按大小升序列出，我们得到：
+
+1/8, 1/7, 1/6, 1/5, 1/4, 2/7, 1/3, 3/8, 2/5, 3/7, 1/2, 4/7, 3/5, 5/8, 2/3, 5/7, 3/4, 4/5, 5/6, 6/7, 7/8
+可以看出该集合中共有21个元素。
+
+d ≤ 1,000,000的最简真分数构成的集合中共有多少个元素？
+
+其实本题是求 1~100W 每个数的互质数的个数的和
+'''
+'''
+def No_72_Counting_fractions(num=10**6):
+    f = 0
+    for i in range(1, num+1):
+        for j in range(i+1, num+1):
+            if common_for_euler.gys(i, j) == 1:
+                f += 1
+    return f
+'''
+
+def No_72_Counting_fractions(num=10**6):  # 欧拉公式来标记列表
+    p_list = common_for_euler.prime_list(num)  # 建立num以内的素数列表
+    h_list = [0] * (num + 1)  # 建立一个有num+1个0的列表
+
+    for i in p_list:  # 先处理所有素数
+        h_list[i] = i - 1  # 素数的互质数为[素数-1]
+
+    for index, value in enumerate(p_list):  # 用素数来处理倍数[一层一层的覆盖]
+
+        for n in range(value * value, num + 1, value):  # 处理素数的倍数
+            h_list[n] = h_list[int(n / value)] * (value - 1)
+
+        for m in range(value * value, num + 1, value * value):  # 处理素数倍数的倍数
+            h_list[m] = h_list[int(m / value)] * value
+
+    return sum(h_list)
+
+# Project Euler No.73
+'''
+分数有范围计数
+
+考虑形如n/d的分数，其中n和d均为正整数。如果n < d且其最大公约数为1，则该分数称为最简真分数。
+
+如果我们将d ≤ 8的最简真分数构成的集合按大小升序列出，我们得到：
+
+1/8, 1/7, 1/6, 1/5, 1/4, 2/7, 1/3, 3/8, 2/5, 3/7, 1/2, 4/7, 3/5, 5/8, 2/3, 5/7, 3/4, 4/5, 5/6, 6/7, 7/8
+可以看出在1/3和1/2之间有3个分数。
+
+将d ≤ 12,000的最简真分数构成的集合排序后，在1/3和1/2之间有多少个分数？
+'''
+
+def No_73_Counting_fractions_in_a_range(max_range=12000):
+    f = {}
+    for i in range(1, max_range):
+        for j in range(i + 1, max_range):
+            if 1 / 3 < i / j < 1 / 2 and common_for_euler.gys(i, j) == 1:
+                f[i, j] = i / j
+
+'''
+更科学的方法
+count = {}  # 削去重复项
+for i in range(3, 12001):
+        for j in range (int(i / 3),int(i / 2 + 1)):  # 把范围缩小,而且过滤了非互质数
+                if 1 / 2 > j / i > 1 / 3:
+                        count[(j / i)] = j / i
+'''
