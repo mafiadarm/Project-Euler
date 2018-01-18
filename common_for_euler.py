@@ -1,8 +1,20 @@
-# -- coding = utf-8 --
-
+# -*- coding: utf-8 -*-
 """
-以下为常用函数
+==============================
+   Date:           01_17_2018  16:08
+   File Name:      /GitHub/randomQuizGenerator
+   Creat From:     PyCharm
+- - - - - - - - - - - - - - -
+   Description:    常用函数
+   算法考虑：
+                   使用公式
+                   使用规律
+                   使用点阵
+                   使用倍数处理
+                   使用递归
+==============================
 """
+__author__ = 'Loffew'
 
 
 def __init__():
@@ -41,7 +53,7 @@ def common_Divisor(x, y, z, li):  # 最小公倍数 详见 005
         x, y = y, x % y
     return li.append(z / x * li[-1] / x * x)
 
-def gys(x, y):  # 求x,y的最大公约数
+def gys(x, y):  # 求x,y的最大公约数  可以用math.gcd()
     while y:
         x, y = y, x % y
     return x
@@ -147,3 +159,16 @@ def x_shape_list(lamb_da, max_range, min_range=1):  # lamb_da= lambda x:公式 �
         if n >= max_range:
             return lis
         lis.append(n)
+
+def divide_count(num, dig, tmp_dict):  # num写成+dig的所有方式 见076
+    if num == dig or dig == 1:
+        return 1
+    elif dig > num:
+        return 0
+    else:
+        if tmp_dict.get(str(num) + ',' + str(dig)) is None:
+            tmp = divide_count(num - 1, dig - 1, tmp_dict) + divide_count(num - dig, dig, tmp_dict)  # 递归
+            tmp_dict[str(num) + ',' + str(dig)] = tmp
+            return tmp
+        else:
+            return tmp_dict.get(str(num) + ',' + str(dig))

@@ -950,16 +950,19 @@ def No_67_Maximum_path_sum_II():
 在如下的“魔力”五边形环中，在其中填入1至10这10个数，根据不同的填写方式，可以组成16位或17位数字串。在“魔力”五边形环中，最大的16位数字串是多少？
 '''
 
+
 def No_68_Magic_5_gon_ring():
     from itertools import permutations
     num = 0
     for i in permutations(range(1, 11)):
         if i[0] == 6 and not {10, 9, 8, 7, 6} & set(i[5:]):
             x = list(i)
-            if sum(x[:1] + x[5:7]) == sum(x[1:2] + x[6:8]) == sum(x[2:3] + x[7:9]) == sum(x[3:4] + x[8:]) == sum(x[4:5] + x[9:] + x[5:6]):
+            if sum(x[:1] + x[5:7]) == sum(x[1:2] + x[6:8]) == sum(x[2:3] + x[7:9]) == sum(x[3:4] + x[8:]) == sum(
+                    x[4:5] + x[9:] + x[5:6]):
                 y = x[:1] + x[5:7] + x[1:2] + x[6:8] + x[2:3] + x[7:9] + x[3:4] + x[8:] + x[4:5] + x[9:] + x[5:6]
                 num = max(num, int("".join([str(k) for k in y])))
     return num
+
 
 # Project Euler No.69
 '''
@@ -989,8 +992,10 @@ n	互质的数	φ(n)	n/φ(n)
 所以直接从第一个质数开始往上乘[2x3x5x7x9x....]，在规定范围内，组成的最大的数就是 使得n/φ(n)取得最大值的n
 如果在此范围内，数值过小，可以用这个数再从头开始乘以这些质数，试试会不会超过范围
 '''
-def No_69_Totient_maximum(max_range=10**6):
-    num_list = common_for_euler.prime_list(int(max_range**(1/2)))
+
+
+def No_69_Totient_maximum(max_range=10 ** 6):
+    num_list = common_for_euler.prime_list(int(max_range ** (1 / 2)))
     num = 1
     pri_list = []
     for i in num_list:
@@ -1002,9 +1007,13 @@ def No_69_Totient_maximum(max_range=10**6):
             break
     # 校验最大数 比如在100以内是90[2,3,5,3]
     while True:
-        if num * pri_list[-1] > max_range: pri_list.pop()
-        else: num *= pri_list[-1]
+        if num * pri_list[-1] > max_range:
+            pri_list.pop()
+        else:
+            num *= pri_list[-1]
         if len(pri_list) == 0: return int(num)
+
+
 '''
 欧拉函数就是指：对于一个正整数n，小于n且和n互质的正整数（包括1）的个数，记作φ(n) 。
 欧拉函数的通式：φ(n)=n*(1-1/p1)*(1-1/p2)*(1-1/p3)*(1-1/p4)…..(1-1/pn),其中p1, p2……pn为n的所有质因数，n是不为0的整数。
@@ -1037,7 +1046,9 @@ for i in range(1,10**6+1):
 
 用69题的思路，本题的分解质因子的集合越少，最好是n=2个质因子相乘[因为肯定不是质数]
 '''
-def No_70_Totient_permutation(max_range=10**7):
+
+
+def No_70_Totient_permutation(max_range=10 ** 7):
     lis = common_for_euler.prime_list(int(max_range / 2), 2)  # 要保证2*最大质数 刚好在范围内
     num = 0
     cha = 10
@@ -1082,7 +1093,8 @@ def No_70_Totient_permutation(max_range=10**7):
 
 '''
 
-def No_71_Ordered_ractions(num=10**6):
+
+def No_71_Ordered_ractions(num=10 ** 6):
     x = d = num
     f = {}
     while d > 0:
@@ -1096,6 +1108,7 @@ def No_71_Ordered_ractions(num=10**6):
             if not d:
                 break
     return max(f, key=f.get)[0]
+
 
 # Project Euler No.72
 '''
@@ -1122,7 +1135,8 @@ def No_72_Counting_fractions(num=10**6):
     return f
 '''
 
-def No_72_Counting_fractions(num=10**6):  # 欧拉公式来标记列表
+
+def No_72_Counting_fractions(num=10 ** 6):  # 欧拉公式来标记列表
     p_list = common_for_euler.prime_list(num)  # 建立num以内的素数列表
     h_list = [0] * (num + 1)  # 建立一个有num+1个0的列表
 
@@ -1139,6 +1153,7 @@ def No_72_Counting_fractions(num=10**6):  # 欧拉公式来标记列表
 
     return sum(h_list)
 
+
 # Project Euler No.73
 '''
 分数有范围计数
@@ -1153,12 +1168,14 @@ def No_72_Counting_fractions(num=10**6):  # 欧拉公式来标记列表
 将d ≤ 12,000的最简真分数构成的集合排序后，在1/3和1/2之间有多少个分数？
 '''
 
+
 def No_73_Counting_fractions_in_a_range(max_range=12000):
     f = {}
     for i in range(1, max_range):
         for j in range(i + 1, max_range):
             if 1 / 3 < i / j < 1 / 2 and common_for_euler.gys(i, j) == 1:
                 f[i, j] = i / j
+
 
 '''
 更科学的方法
@@ -1168,3 +1185,144 @@ for i in range(3, 12001):
                 if 1 / 2 > j / i > 1 / 3:
                         count[(j / i)] = j / i
 '''
+
+# Project Euler No.74
+'''
+数字阶乘链
+
+145之所以广为人知，是因为它的各位数字的阶乘之和恰好等于本身：
+
+1! + 4! + 5! = 1 + 24 + 120 = 145
+
+而169则可能不太为人所知，尽管从169开始不断地取各位数字的阶乘之和构成了最长的循环回到169；事实上，只存在三个这样的循环：
+
+169 → 363601 → 1454 → 169
+871 → 45361 → 871
+872 → 45362 → 872
+
+不难证明，从任意数字出发最终都会陷入循环。例如，
+
+69 → 363600 → 1454 → 169 → 363601 (→ 1454)
+78 → 45360 → 871 → 45361 (→ 871)
+540 → 145 (→ 145)
+
+从69开始可以得到一个拥有五个不重复项的链，但是从一个小于一百万的数出发能够得到的最长的无重复项链包含有60项。
+
+从小于一百万的数出发，有多少条链恰好包含有60个不重复项？
+'''
+
+
+def No_74_Digit_factorial_chains(max_range=10 ** 6):  # 12821
+    from math import factorial
+    count = 0
+    for num in range(2, max_range):
+        num_set = {num}
+        flag = True
+
+        while flag:
+            tmp = 0
+            for i in str(num):
+                tmp += factorial(int(i))
+
+            if tmp in num_set:
+                if len(num_set) == 60:
+                    count += 1
+                flag = False
+
+            num_set.add(tmp)
+            num = tmp
+
+    return count
+
+
+# Project Euler No.75
+'''
+唯一的整数边直角三角形
+
+只能唯一地弯折成整数边直角三角形的电线最短长度是12厘米；当然，还有很多长度的电线都只能唯一地弯折成整数边直角三角形，例如：
+
+12厘米: (3,4,5)
+24厘米: (6,8,10)
+30厘米: (5,12,13)
+36厘米: (9,12,15)
+40厘米: (8,15,17)
+48厘米: (12,16,20)
+
+相反地，有些长度的电线，比如20厘米，不可能弯折成任何整数边直角三角形，而另一些长度则有多个解；例如，120厘米的电线可以弯折成三个不同的整数边直角三角形。
+
+120厘米: (30,40,50), (20,48,52), (24,45,51)
+
+记电线长度为L，对于L ≤ 1,500,000，有多少种取值只能唯一地弯折成整数边直角三角形？
+
+a=m^2-n^2,b=2mn,c=m^2+n^2 (m大于n mn为正整数） 可以得证a²+b²=c² 就是一组直角三角形
+所以max_range< (150W/2)**0.5 [c为最大范围]
+'''
+
+
+def No_75_Singular_integer_right_triangles(num=1500000):
+    max_range = int((num / 2) ** 0.5)
+    point_list = [0] * (num + 1)
+    count = 0
+
+    for m in range(2, max_range):
+        for n in range(1, m):
+            if ((m + n) % 2) == 1 and common_for_euler.gys(m, n) == 1:  # 因为后面倍数打点，所以把有公约数的去掉
+                a = m * m - n * n
+                b = 2 * m * n
+                c = m * m + n * n
+                s = a + b + c
+
+                while s <= num:
+                    point_list[s] = point_list[s] + 1
+                    if point_list[c] == 1:
+                        count = count + 1
+                    if point_list[s] == 2:  # 有大于2的就不做处理了[已经计算过]
+                        count = count - 1
+                    s = s + a + b + c  # 再到倍数上去打点
+    return count
+
+'''
+def No_75_Singular_integer_right_triangles(num=1500000):
+    max_range = int((num / 2)**0.5)
+    lis = []
+    count = 0
+    for m in range(1, max_range+1):
+        for n in range(1, m):
+            a = m**2-n**2
+            b = 2*m*n
+            c = m**2 + n**2
+            if not k % 1 and k + i + j <= num:
+                lis.append(int(k + i + j))  # 最后统计相同数
+            elif k + i + j > num:
+                break
+
+    set_list = set(tuple(lis))  # 去掉重复的组合
+    for i in set_list:
+        if lis.count(i) == 1:
+            count += 1
+    return count
+'''
+
+# Project Euler No.76
+'''
+加和计数
+
+将5写成整数的和有6种不同的方式：
+
+4 + 1
+3 + 2
+3 + 1 + 1
+2 + 2 + 1
+2 + 1 + 1 + 1
+1 + 1 + 1 + 1 + 1
+
+将100写成整数的和有多少种不同的方式？
+
+有多少总方式100=1+99、100=2+98、100=1+1+98......
+'''
+def No_76_Counting_summations(num=100):
+    tmp_dict = {}
+    count = 0
+    for m in range(2, num + 1):
+        count += common_for_euler.divide_count(num, m, tmp_dict)
+    return count
