@@ -12,6 +12,7 @@
                    使用点阵
                    使用倍数处理
                    使用递归
+                   排序方法
 ==============================
 """
 __author__ = 'Loffew'
@@ -20,14 +21,16 @@ __author__ = 'Loffew'
 def __init__():
     pass
 
+
 def per_com(num_range, amount):
     from math import factorial
-    per = int(factorial(num_range)/factorial(num_range-amount))
-    com = int(factorial(num_range)/(factorial(amount)*factorial(num_range-amount)))
+    per = int(factorial(num_range) / factorial(num_range - amount))
+    com = int(factorial(num_range) / (factorial(amount) * factorial(num_range - amount)))
     chara_per = "If use permutations {}".format(per)
     chara_com = "If use combinations {}".format(com)
     print(chara_per.ljust(30, " "))
     print(chara_com.ljust(30, " "))
+
 
 def isPrime2(n):  # 短除法，验证列表内的数字是否是质数
     if int(n ** 0.5) ** 2 != n and n != 1 and n != 0:
@@ -35,6 +38,7 @@ def isPrime2(n):  # 短除法，验证列表内的数字是否是质数
             if n % i == 0:
                 return False
         return True
+
 
 def isPrime_factor(n):  # 列出所有质因子，如果传1进去，列表会是空值
     li, f = [], 2
@@ -53,10 +57,12 @@ def common_Divisor(x, y, z, li):  # 最小公倍数 详见 005
         x, y = y, x % y
     return li.append(z / x * li[-1] / x * x)
 
+
 def gys(x, y):  # 求x,y的最大公约数  可以用math.gcd()
     while y:
         x, y = y, x % y
     return x
+
 
 def cycles(x):  # 循环节
     a, lis = 1, []
@@ -117,14 +123,17 @@ def poker_soccer(poker_num, poker_fol):  # 判断规则详见054
     lip = sorted(poker_fol)  # 花色
     poker_num_count = Counter(lis)
     if len(set(lip)) == 1:
-        if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]) and point_dict.get(lis[-1]) == 14:
+        if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum(
+                [point_dict.get(i) for i in lis]) == point_dict.get(lis[2]) and point_dict.get(lis[-1]) == 14:
             return point_dict.get(lip[0]) * 10 ** 9
-        elif point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
+        elif point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum(
+                [point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
             return point_dict.get(lis[-1]) * 10 ** 8 + point_dict.get(lip[0])
         else:
             return point_dict.get(lis[-1]) * 10 ** 5
     elif len(set(lip)) > 1:
-        if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum([point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
+        if point_dict.get(lis[-1]) - point_dict.get(lis[0]) == 4 and sum(
+                [point_dict.get(i) for i in lis]) == point_dict.get(lis[2]):
             return point_dict.get(lis[-1]) * 10 ** 4
         else:
             return point_dict.get(lis[-1])
@@ -148,6 +157,7 @@ def poker_soccer(poker_num, poker_fol):  # 判断规则详见054
                 else:
                     return point_dict.get(two) * 10 ** 1 + point_dict.get(one)
 
+
 def x_shape_list(lamb_da, max_range, min_range=1):  # lamb_da= lambda x:公式 范例见061
     lis = []
     i = 0
@@ -159,6 +169,7 @@ def x_shape_list(lamb_da, max_range, min_range=1):  # lamb_da= lambda x:公式 �
         if n >= max_range:
             return lis
         lis.append(n)
+
 
 def divide_count(num, dig, tmp_dict):  # num写成+dig的所有方式 见076
     if num == dig or dig == 1:

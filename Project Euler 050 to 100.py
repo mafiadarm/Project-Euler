@@ -1281,6 +1281,7 @@ def No_75_Singular_integer_right_triangles(num=1500000):
                     s = s + a + b + c  # 再到倍数上去打点
     return count
 
+
 '''
 def No_75_Singular_integer_right_triangles(num=1500000):
     max_range = int((num / 2)**0.5)
@@ -1320,12 +1321,15 @@ def No_75_Singular_integer_right_triangles(num=1500000):
 
 有多少总方式100=1+99、100=2+98、100=1+1+98......
 '''
+
+
 def No_76_Counting_summations(num=100):
     tmp_dict = {}
     count = 0
     for m in range(2, num + 1):
         count += common_for_euler.divide_count(num, m, tmp_dict)
     return count
+
 
 # Project Euler No.77
 '''
@@ -1341,12 +1345,18 @@ def No_76_Counting_summations(num=100):
 
 写成素数的和有超过五千种不同的方式的数最小是多少？
 '''
+
+
 def No_76_Prime_summations(num=100, min_range=5000):
     primes = [True] * num
     prime = common_for_euler.prime_list(num)
     P = len(prime)
-    # R = [[0] * P] * num
-    R = [[0] * P for i in range(100)]
+
+    # R = [[0] * P] * num  # 等价，但是结果不同
+    R = []
+    for i in range(100):
+        R.append([0] * P)
+
     for k in range(P):
         R[0][k] = 1
     for n in range(0, num, 2):
@@ -1356,9 +1366,8 @@ def No_76_Prime_summations(num=100, min_range=5000):
             R[n][k] = R[n][k - 1]
             if prime[k] <= n:
                 R[n][k] += R[n - prime[k]][k]
-        if R[n][-1] >= min_range and not primes[n] or R[n][-1] >= min_range+1:
-            print(n)
-            break
+        if R[n][-1] >= min_range and not primes[n] or R[n][-1] >= min_range + 1:
+            return n
 
 # Project Euler No.78
 '''
@@ -1380,6 +1389,8 @@ O O O O O
 维基百科的公式
 p(k) = p(k-(3*n*n-n)/2) + p(k-(3*n*n+n)/2) - p(k-(3*n*n+5*n+2)/2) - p(k-(3*n*n+7*n+4)/2) +... (n from 1 to ...) while p(0) = 1 and p(1) = 1
 '''
+
+
 def No_78_Coin_partitions():
     from itertools import count
     tmpDict = {0: 1, 1: 1}
@@ -1413,6 +1424,7 @@ def No_78_Coin_partitions():
         if not s % 1000000:
             return k
 
+
 # Project Euler No.79
 '''
 密码推断
@@ -1427,16 +1439,20 @@ def No_78_Coin_partitions():
 筛选出所有出现过的数字
 用冒泡排序做出来
 '''
+
+
 def No_79_Passcode_derivation():
     with open("p079_keylog.txt", "r") as rr:
         ss = rr.readlines()
 
     sr = list({i[j] for i in ss for j in range(3)})
     auth_set = {i[:3] for i in ss}
+
     for i in auth_set:
         a, b, c = [sr.index(j) for j in i]
         sr[a], sr[b], sr[c] = [sr[j] for j in sorted([a, b, c])]
     return "".join(sr)
+
 
 # Project Euler No.80
 '''
@@ -1450,6 +1466,7 @@ def No_79_Passcode_derivation():
 
 这里用到decimal库，计算高精度小数
 '''
+
 
 def No_80_Square_root_digital_expansion():
     import decimal
