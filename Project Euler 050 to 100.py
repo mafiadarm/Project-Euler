@@ -1483,3 +1483,185 @@ def No_80_Square_root_digital_expansion():
             sum_count += t
 
     return sum_count
+
+# Project Euler No.81
+'''
+路径和：两个方向
+
+在如下的5乘5矩阵中，从左上方到右下方始终只向右或向下移动的最小路径和为2427，由标注红色的路径给出。
+
+ 	 	 	 	 
+131	673	234	103	18
+201	96	342	965	150
+630	803	746	422	111
+537	699	497	121	956
+805	732	524	37	331
+在这个31K的文本文件matrix.txt（右击并选择“目标另存为……”）中包含了一个80乘80的矩阵，求出从该矩阵的左上方到右下方始终
+只向右和向下移动的最小路径和。
+'''
+
+
+def No_81_Path_sum_two_ways():
+    path_list = []
+    with open("p081_matrix.txt", "r") as rr:
+        for i in range(80):
+            str_num = rr.readline().replace("\n", "").split(",")
+            path_list.append([int(i) for i in str_num])
+
+    side = len(path_list)
+    for i in range(side):
+        for j in range(side):
+            if i == 0 and j == 0:
+                pass
+            elif i == 0:
+                path_list[i][j] += path_list[i][j - 1]
+            elif j == 0:
+                path_list[i][j] += path_list[i - 1][j]
+            else:
+                if path_list[i][j - 1] < path_list[i - 1][j]:
+                    path_list[i][j] += path_list[i][j - 1]
+                else:
+                    path_list[i][j] += path_list[i - 1][j]
+    return path_list[side - 1][side - 1]
+
+# Project Euler No.82
+'''
+路径和：三个方向
+
+注意：这是第81题的一个更具挑战性的版本。
+
+在如下的5乘5矩阵中，从最左栏任意一格出发，始终只向右、向上或向下移动，到最右栏任意一格结束的最小路径和为994，由标注红色的路径给出。
+
+ 	 	 	 	 
+131	673	234	103	18
+201	96	342	965	150
+630	803	746	422	111
+537	699	497	121	956
+805	732	524	37	331
+在这个31K的文本文件matrix.txt（右击并选择“目标另存为……”）中包含了一个80乘80的矩阵，求出从最左栏到最右栏的最小路径和。
+'''
+
+
+def No_81_Path_sum_three_ways():
+    path_list = []
+    with open("p081_matrix.txt", "r") as rr:
+        for i in range(80):
+            str_num = rr.readline().replace("\n", "").split(",")
+            path_list.append([int(i) for i in str_num])
+
+    targ_list = [path_list[i][79] for i in range(80)]
+    for i in range(78, -1, -1):
+        targ_list[0] = targ_list[0] + path_list[0][i]
+
+        for j in range(1, 80):
+            targ_list[j] = min(targ_list[j] + path_list[j][i], targ_list[j - 1] + path_list[j][i])
+
+        for k in range(78, -1, -1):
+            targ_list[k] = min(targ_list[k], targ_list[k + 1] + path_list[k][i])
+
+    return min(targ_list)
+
+# Project Euler No.83
+'''
+路径和：四个方向
+
+注意：这是第81题的一个极具挑战性的版本。
+
+在如下的5乘5矩阵中，从左上角到右下角任意地向上、向下、向左或向右移动的最小路径和为2297，由标注红色的路径给出。
+
+ 	 	 	 	 
+131	673	234	103	18
+201	96	342	965	150
+630	803	746	422	111
+537	699	497	121	956
+805	732	524	37	331
+在这个31K的文本文件matrix.txt（右击并选择“目标另存为……”）中包含了一个80乘80的矩阵，求出从左上角到右下角任意地向上、向下、向左或向右移动的最小路径和。
+'''
+
+
+def No_81_Path_sum_four_ways():
+    pass
+
+'''
+能出结果
+file=open('E:\\GitHub\Project-Euler\p081_matrix.txt')
+f=file.read()
+file.close()
+s=f.split('\n')
+matrix = [[]*80 for i in range(80)]
+for i in range(80):
+    matrix[i]=s[i].split(',')
+for i in range(80):
+    for j in range(80):
+        matrix[i][j]=int(matrix[i][j])
+
+visited = [[False]*80 for i in range(80)]
+dp = [[999999]*80 for i in range(80)]
+move = [(1,0),(-1,0),(0,1),(0,-1)]
+checklist = [(0,0)]
+dp[0][0] = 4445
+
+#define the method for searching the best way:
+def findway(x,y):
+        if not visited[x][y]:
+                visited[x][y] = True
+                for m in move:
+                        nx,ny = x+m[0],y+m[1]
+                        if 0<=nx<80 and 0<=ny<80:
+                                dp[nx][ny] = min(dp[x][y]+matrix[nx][ny],dp[nx][ny])
+                                checklist.append((nx,ny))
+
+#min7979 is the min price to go:
+min7979 = 999999
+
+#repeat again and again until the min is stable, that's the answer.
+while True:
+        for i in range(len(checklist)):
+                findway(checklist[i][0],checklist[i][1])
+        if len([(j,k) for j in range(80) for k in range(80) if not visited[j][k]]) == 0:
+                visited = [[False]*80 for i in range(80)]
+                checklist = [(0,0)]
+                if min7979 > dp[79][79]:
+                        min7979 = dp[79][79]
+                else:
+                        print (min7979)
+                        break
+'''
+'''
+path_list = []
+with open("E:\\GitHub\Project-Euler\p081_matrix.txt", "r") as rr:
+    for i in range(80):
+        str_num = rr.readline().replace("\n", "").split(",")
+        path_list.append([int(i) for i in str_num])
+
+side = 79
+x,y = 0,0
+while x!=side:
+    dic = {}
+
+    if a < 0:
+        pass
+    else:
+        dic[path_list[x-1][y]] = (a,y)
+
+    if b > side:
+        pass
+    else:
+        dic[path_list[x+1][y]] = (b,y)
+
+    if c < 0:
+        pass
+    else:
+        dic[path_list[x][y-1]] = (x,c)
+
+    if d > side:
+        pass
+    else:
+        dic[path_list[x][y+1]] = (x,d)
+
+    cache_num = path_list[x][y]
+    path_list[x][y] = 9999999
+    x,y = dic.get(min(dic))
+    ss[x][y] = 1
+    path_list[x][y] += cache_num
+'''
