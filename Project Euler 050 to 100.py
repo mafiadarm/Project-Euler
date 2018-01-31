@@ -1,6 +1,6 @@
 # -- coding = utf-8 --
 # python version 3.6
-import common_for_euler
+from Project_Euler.common_for_euler import *
 
 # Project Euler No.51
 '''
@@ -30,7 +30,7 @@ def No_51_Prime_Digit_replacements(num=10000):
         prime_list = [k for k, prime_num in enumerate(bool_list) if prime_num and len(set(str(k))) < len(str(k))]
 
         for the_num in prime_list:
-            check_dict = common_for_euler.replace_same_digital(the_num, list(range(10)))
+            check_dict = replace_same_digital(the_num, list(range(10)))
             for key in check_dict:
                 if len([n for n in check_dict[key] if bool_list[n] and len(str(n)) == len(str(the_num))]) == 8:
                     return the_num
@@ -257,8 +257,7 @@ def No_54_Poker_hands():
             p1_poker_fol = ll[1] + ll[4] + ll[7] + ll[10] + ll[13]
             p2_poker_num = ll[15] + ll[18] + ll[21] + ll[24] + ll[27]
             p2_poker_fol = ll[16] + ll[19] + ll[22] + ll[25] + ll[28]
-            if common_for_euler.poker_soccer(p1_poker_num, p1_poker_fol) > common_for_euler.poker_soccer(p2_poker_num,
-                                                                                                         p2_poker_fol):
+            if poker_soccer(p1_poker_num, p1_poker_fol) > poker_soccer(p2_poker_num, p2_poker_fol):
                 win += 1
     return win
 
@@ -296,7 +295,7 @@ def No_55_Lychrel_numbers():
         yes_or_no = i
         for j in range(50):
             yes_or_no += int(str(yes_or_no)[::-1])
-            if common_for_euler.is_palindrome(yes_or_no):
+            if is_palindrome(yes_or_no):
                 count += 1
                 break
     return count
@@ -381,7 +380,7 @@ def No_58_Spiral_primes():
         side_large += 2
         count_spiral += 4
         for j in range(1, 4):
-            if common_for_euler.isPrime2(side_large ** 2 - interval * j):
+            if isPrime2(side_large ** 2 - interval * j):
                 count_prime += 1
         if count_prime / count_spiral < 0.1:
             return side_large
@@ -446,14 +445,14 @@ def No_59_XOR_decryption(guess=32):
 
 def No_60_Prime_pair_sets():
     from itertools import combinations  # 不重复的组合
-    lis = common_for_euler.prime_list(10000)
+    lis = prime_list(10000)
     ll = []
     for i in combinations(lis, 5):
         flag = True
         for o in combinations(i, 2):
             num1 = int(str(o[0]) + str(o[1]))
             num2 = int(str(o[1]) + str(o[0]))
-            if not common_for_euler.isPrime2(num1) or not common_for_euler.isPrime2(num2):
+            if not isPrime2(num1) or not isPrime2(num2):
                 flag = False
                 break
         if flag:
@@ -542,12 +541,12 @@ if __name__ == '__main__':
 
 
 def No_61_Cyclical_figurate_numbers(min_num=1000, max_num=10000):
-    p3 = common_for_euler.x_shape_list(lambda n: n * (n + 1) // 2, max_num, min_num)
-    p4 = common_for_euler.x_shape_list(lambda n: n * n, max_num, min_num)
-    p5 = common_for_euler.x_shape_list(lambda n: n * (3 * n - 1) // 2, max_num, min_num)
-    p6 = common_for_euler.x_shape_list(lambda n: n * (2 * n - 1), max_num, min_num)
-    p7 = common_for_euler.x_shape_list(lambda n: n * (5 * n - 3) // 2, max_num, min_num)
-    p8 = common_for_euler.x_shape_list(lambda n: n * (3 * n - 2), max_num, min_num)
+    p3 = x_shape_list(lambda n: n * (n + 1) // 2, max_num, min_num)
+    p4 = x_shape_list(lambda n: n * n, max_num, min_num)
+    p5 = x_shape_list(lambda n: n * (3 * n - 1) // 2, max_num, min_num)
+    p6 = x_shape_list(lambda n: n * (2 * n - 1), max_num, min_num)
+    p7 = x_shape_list(lambda n: n * (5 * n - 3) // 2, max_num, min_num)
+    p8 = x_shape_list(lambda n: n * (3 * n - 2), max_num, min_num)
     p_list = [p3, p4, p5, p6, p7, p8]
     flag = [False] * 6
 
@@ -995,7 +994,7 @@ n	互质的数	φ(n)	n/φ(n)
 
 
 def No_69_Totient_maximum(max_range=10 ** 6):
-    num_list = common_for_euler.prime_list(int(max_range ** (1 / 2)))
+    num_list = prime_list(int(max_range ** (1 / 2)))
     num = 1
     pri_list = []
     for i in num_list:
@@ -1023,7 +1022,7 @@ y = 0
 num = 0
 for i in range(1,10**6+1):
     x = i
-    for j in set(common_for_euler.isPrime_factor(i)):
+    for j in set(isPrime_factor(i)):
         x *= 1-1/j
     if y < i/x:
         y = i/x
@@ -1049,7 +1048,7 @@ for i in range(1,10**6+1):
 
 
 def No_70_Totient_permutation(max_range=10 ** 7):
-    lis = common_for_euler.prime_list(int(max_range / 2), 2)  # 要保证2*最大质数 刚好在范围内
+    lis = prime_list(int(max_range / 2), 2)  # 要保证2*最大质数 刚好在范围内
     num = 0
     cha = 10
 
@@ -1102,7 +1101,7 @@ def No_71_Ordered_ractions(num=10 ** 6):
             x -= 1
 
         while x / d < 3 / 7:
-            if common_for_euler.gys(x, d) == 1:
+            if gys(x, d) == 1:
                 f[x, d] = x / d
             d -= 1
             if not d:
@@ -1130,14 +1129,14 @@ def No_72_Counting_fractions(num=10**6):
     f = 0
     for i in range(1, num+1):
         for j in range(i+1, num+1):
-            if common_for_euler.gys(i, j) == 1:
+            if gys(i, j) == 1:
                 f += 1
     return f
 '''
 
 
 def No_72_Counting_fractions(num=10 ** 6):  # 欧拉公式来标记列表
-    p_list = common_for_euler.prime_list(num)  # 建立num以内的素数列表
+    p_list = prime_list(num)  # 建立num以内的素数列表
     h_list = [0] * (num + 1)  # 建立一个有num+1个0的列表
 
     for i in p_list:  # 先处理所有素数
@@ -1173,7 +1172,7 @@ def No_73_Counting_fractions_in_a_range(max_range=12000):
     f = {}
     for i in range(1, max_range):
         for j in range(i + 1, max_range):
-            if 1 / 3 < i / j < 1 / 2 and common_for_euler.gys(i, j) == 1:
+            if 1 / 3 < i / j < 1 / 2 and gys(i, j) == 1:
                 f[i, j] = i / j
 
 
@@ -1266,7 +1265,7 @@ def No_75_Singular_integer_right_triangles(num=1500000):
 
     for m in range(2, max_range):
         for n in range(1, m):
-            if ((m + n) % 2) == 1 and common_for_euler.gys(m, n) == 1:  # 因为后面倍数打点，所以把有公约数的去掉
+            if ((m + n) % 2) == 1 and gys(m, n) == 1:  # 因为后面倍数打点，所以把有公约数的去掉
                 a = m * m - n * n
                 b = 2 * m * n
                 c = m * m + n * n
@@ -1327,7 +1326,7 @@ def No_76_Counting_summations(num=100):
     tmp_dict = {}
     count = 0
     for m in range(2, num + 1):
-        count += common_for_euler.divide_count(num, m, tmp_dict)
+        count += divide_count(num, m, tmp_dict)
     return count
 
 
@@ -1349,7 +1348,7 @@ def No_76_Counting_summations(num=100):
 
 def No_76_Prime_summations(num=100, min_range=5000):
     primes = [True] * num
-    prime = common_for_euler.prime_list(num)
+    prime = prime_list(num)
     P = len(prime)
 
     # R = [[0] * P] * num  # 等价，但是结果不同
