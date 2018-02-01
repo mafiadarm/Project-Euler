@@ -27,9 +27,9 @@ def No_51_Prime_Digit_replacements(num=10000):
                 for j in range(i * i, num, i):
                     bool_list[j] = False
 
-        prime_list = [k for k, prime_num in enumerate(bool_list) if prime_num and len(set(str(k))) < len(str(k))]
+        primeList = [k for k, prime_num in enumerate(bool_list) if prime_num and len(set(str(k))) < len(str(k))]
 
-        for the_num in prime_list:
+        for the_num in primeList:
             check_dict = replace_same_digital(the_num, list(range(10)))
             for key in check_dict:
                 if len([n for n in check_dict[key] if bool_list[n] and len(str(n)) == len(str(the_num))]) == 8:
@@ -1368,6 +1368,7 @@ def No_76_Prime_summations(num=100, min_range=5000):
         if R[n][-1] >= min_range and not primes[n] or R[n][-1] >= min_range + 1:
             return n
 
+
 # Project Euler No.78
 '''
 硬币分拆
@@ -1483,6 +1484,7 @@ def No_80_Square_root_digital_expansion():
 
     return sum_count
 
+
 # Project Euler No.81
 '''
 路径和：两个方向
@@ -1523,6 +1525,7 @@ def No_81_Path_sum_two_ways():
                     path_list[i][j] += path_list[i - 1][j]
     return path_list[side - 1][side - 1]
 
+
 # Project Euler No.82
 '''
 路径和：三个方向
@@ -1560,6 +1563,7 @@ def No_81_Path_sum_three_ways():
 
     return min(targ_list)
 
+
 # Project Euler No.83
 '''
 路径和：四个方向
@@ -1579,7 +1583,43 @@ def No_81_Path_sum_three_ways():
 
 
 def No_81_Path_sum_four_ways():
-    pass
+    path_list = []
+    with open("E:\\GitHub\Project-Euler\p081_matrix.txt", "r") as rr:
+        for i in range(80):
+            str_num = rr.readline().replace("\n", "").split(",")
+            path_list.append([int(i) for i in str_num])
+
+    side = 79
+    x, y = 0, 0
+    while x != side:
+        dic = {}
+
+        if a < 0:
+            pass
+        else:
+            dic[path_list[x - 1][y]] = (a, y)
+
+        if b > side:
+            pass
+        else:
+            dic[path_list[x + 1][y]] = (b, y)
+
+        if c < 0:
+            pass
+        else:
+            dic[path_list[x][y - 1]] = (x, c)
+
+        if d > side:
+            pass
+        else:
+            dic[path_list[x][y + 1]] = (x, d)
+
+        cache_num = path_list[x][y]
+        path_list[x][y] = 9999999
+        x, y = dic.get(min(dic))
+        ss[x][y] = 1
+        path_list[x][y] += cache_num
+
 
 '''
 能出结果
@@ -1626,41 +1666,149 @@ while True:
                         print (min7979)
                         break
 '''
+
+# Project Euler No.84
 '''
-path_list = []
-with open("E:\\GitHub\Project-Euler\p081_matrix.txt", "r") as rr:
-    for i in range(80):
-        str_num = rr.readline().replace("\n", "").split(",")
-        path_list.append([int(i) for i in str_num])
+大富翁几率
 
-side = 79
-x,y = 0,0
-while x!=side:
-    dic = {}
+大富翁游戏的标准棋盘大致如下图所示：
 
-    if a < 0:
-        pass
-    else:
-        dic[path_list[x-1][y]] = (a,y)
+ 	 	 	 	 	 	 	 	 	 	 
+GO	A1	CC1	A2	T1	R1	B1	CH1	B2	B3	JAIL
+H2										C1
+T2										U1
+H1										C2
+CH3										C3
+R4										R2
+G3										D1
+CC3										CC2
+G2										D2
+G1										D3
+G2J	F3	U2	F2	F1	R3	E3	E2	CH2	E1	FP
+玩家从标记有“GO”的方格出发，掷两个六面的骰子并将点数和相加，作为本轮他们前进的步数。如果没有其它规则，那么落在每一格上的概率应该是2.5%。但是，由于“G2J”（入狱）、“CC”（宝箱卡）和“CH”（机会卡）的存在，这个分布会有所改变。
 
-    if b > side:
-        pass
-    else:
-        dic[path_list[x+1][y]] = (b,y)
+除了落在“G2J”上，或者在“CC”或“CH”上抽到入狱卡之外，如果玩家连续三次都掷出两个相同的点数，则在第三次时将会直接入狱。
 
-    if c < 0:
-        pass
-    else:
-        dic[path_list[x][y-1]] = (x,c)
+游戏开始时，“CC”和“CH”所需的卡片将被洗牌打乱。当一个玩家落在“CC”或“CH”上时，他们从宝箱卡和机会卡的牌堆最上方取一张卡并遵循指令行事，并将该卡再放回牌堆的最下方。宝箱卡和机会卡都各有16张，但我们只关心会影响到移动的卡片，其它的卡片我们都将无视它们的效果。
 
-    if d > side:
-        pass
-    else:
-        dic[path_list[x][y+1]] = (x,d)
+宝箱卡 (2/16 张卡):
+回到起点“GO”
+进入监狱“JAIL”
+机会卡 (10/16 张卡):
+回到起点“GO”
+进入监狱“JAIL”
+移动到“C1”
+移动到“E3”
+移动到“H2”
+移动到“R1”
+移动到下一个“R”（铁路公司）
+移动到下一个“R”
+移动到下一个“U”（公共服务公司）
+后退三步
+这道题主要考察掷出骰子后停在某个特定方格上的概率。显然，除了停在“G2J”上的可能性为0之外，停在“CH”格的可能性最小，因为有5/8的情况下玩家会移动到另一格。我们不区分是被送进监狱还是恰好落在监狱“JAIL”这一格，而且不考虑需要掷出两个相同的点数才能出狱的要求，而是假定进入监狱的第二轮就会自动出狱。
 
-    cache_num = path_list[x][y]
-    path_list[x][y] = 9999999
-    x,y = dic.get(min(dic))
-    ss[x][y] = 1
-    path_list[x][y] += cache_num
+从起点“GO”出发，并将方格依次标记00到39，我们可以将这些两位数连接起来表示方格的序列。
+
+统计学上来说，三个最有可能停下的方格分别是“JAIL”（6.24%）或方格10，E3（3.18%）或方格24以及“GO”（3.09%）或方格00。这三个方格可以用一个六位数字串表示：102400。
+
+如果我们不用两个六面的骰子而是用两个四面的骰子，求出三个最有可能停下的方格构成的数字串。
 '''
+
+def No_84_Monopoly_odds():
+    import random
+    position = 0
+    rolls = 100000
+    square_count_map = {}
+    for i in range(40):
+        square_count_map[i] = 0
+    doubles_count = 0
+
+    for i in range(rolls):
+        d1 = random.randint(1, 4)
+        d2 = random.randint(1, 4)
+        if d1 == d2:
+            doubles_count += 1
+        else:
+            doubles_count = 0
+        if doubles_count == 3:
+            position = 10
+            doubles_count = 0
+        else:
+            position += (d1 + d2)
+            position %= 40
+        if position == 30:
+            position = 10
+        elif position in [2, 17, 33]:
+            position = draw_cc(position)
+        elif position in [7, 22, 36]:
+            position = draw_ch(position)
+        square_count_map[position] += 1
+
+    for square in range(40):
+        print(square, round(100 * square_count_map[square] / float(rolls), 4))
+
+    print(sorted(square_count_map, key=lambda x: square_count_map[x])[:-4:-1])
+
+
+# Project Euler No.85
+'''
+数长方形
+
+如果数得足够仔细，能看出在一个3乘2的长方形网格中包含有18个不同大小的长方形，如下图所示：
+
+尽管没有一个长方形网格中包含有恰好两百万个长方形，但有许多长方形网格中包含的长方形数目接近两百万，求其中最接近这一数目的
+长方形网格的面积。
+
+以1为单位，划分网格，长=3个格子，宽=2个格子  所以就是（3+2+1）*（2+1）= 6 * 3 = 18
+三角形公式 （1+3）* 3 / 2 = 6   （1+2）* 2 * 2 = 3
+(（1 + large）* large / 2） * (( 1 + wide) * wide / 2) < 200W
+
+【先求范围】确定范围 wide, large = 100, 100 上面公式会达到25502500，所以可以把遍历范围放到100以内
+'''
+
+def No_85_Counting_rectangles(n=2000000):
+    max_range, value = 1, 0
+    while value < n:
+        max_range *= 10
+        value = ((1 + max_range) * max_range / 2) ** 2
+
+    x, y, z = 0, 0, n
+    for large in range(1, max_range):
+        for wide in range(large, max_range):
+            total = ((1 + large) * large / 2) * ((1 + wide) * wide / 2)
+            if z > abs(n - total):
+                x, y, z = large, wide, abs(n - total)
+            if total > n:
+                break
+    return x, y, z
+
+# Project Euler No.86
+'''
+长方体路径
+
+蜘蛛S位于一个6乘5乘3大小的长方体屋子的一角，而苍蝇F则恰好位于其对角。沿着屋子的表面，从S到F的最短“直线”距离是10，路径如下图所示：
+
+
+然而，对于任意长方体，“最短”路径实际上一共有三种可能；而且，最短路径的长度也并不一定为整数。
+
+当M=100时，若不考虑旋转，所有长、宽、高均不超过M且为整数的长方体中，对角的最短距离是整数的恰好有2060个；这是使得该数目超过两千的最小M值；当M=99时，该数目为1975。
+
+找出使得该数目超过一百万的最小M值。
+
+
+把长方体想想成一个纸盒子，把盒子打开，这条线就是对角线，就是求直角三角形的组合
+当直角三角形，最短两条边均不大于100的情况下，有2060种情况可以满足
+'''
+
+def No_86_Cuboid_route(maxrange=1000000):
+    countKind = large = 0
+    while True:
+        large += 1
+        for sortSide in range(2, 2 * large + 1):
+            n = large ** 2 + sortSide ** 2
+            if n ** 0.5 % 1 == 0:
+                countKind += (sortSide // 2 - max(1, sortSide - large) + 1)
+            if countKind > maxrange:
+                return large
+
+

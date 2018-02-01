@@ -183,3 +183,40 @@ def divide_count(num, dig, tmp_dict):  # num写成+dig的所有方式 见076
             return tmp
         else:
             return tmp_dict.get(str(num) + ',' + str(dig))
+
+def draw_cc(position):  # 084
+    import random
+    cc_map = {0: 0, 1: 10}
+    card_num = random.randint(0, 15)
+    if card_num in cc_map:
+        return cc_map[card_num]
+    return position
+
+
+def draw_ch(position):  # 084
+    import random
+    ch_map = {0: 0, 1: 10, 2: 11, 3: 24, 4: 39, 5: 5}
+    card_num = random.randint(0, 15)
+    if card_num in ch_map:
+        return ch_map[card_num]
+    if card_num == 6 or card_num == 7:
+        if position < 5:
+            return 5
+        if position < 15:
+            return 15
+        if position < 25:
+            return 25
+        if position < 35:
+            return 35
+        return 5
+    if card_num == 8:
+        if position < 12:
+            return 12
+        if position < 28:
+            return 28
+        return 12
+    if card_num == 9:
+        if position == 36:
+            return draw_cc(33)
+        return position - 3
+    return position
