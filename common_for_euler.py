@@ -220,3 +220,15 @@ def draw_ch(position):  # 084
             return draw_cc(33)
         return position - 3
     return position
+
+def getpsn(num, sump, product, start, maxk, n):  # 088 用递归直接处理
+    """
+    对于一个数num   因式分解后因子个数为 product   这些因子的和为sump
+    则需要添加的1 的个数为 num - sump，所以size k = num - sump + product
+    """
+    k = num - sump + product
+    if k < maxk:
+        if num < n[k]:
+            n[k] = num
+        for i in range(start, maxk // num * 2):  # 控制num<=2*maxk
+            getpsn(num * i, sump + i, product + 1, i, maxk, n)

@@ -1582,43 +1582,43 @@ def No_81_Path_sum_three_ways():
 '''
 
 
-def No_81_Path_sum_four_ways():
+def No_83_Path_sum_four_ways():
     path_list = []
     with open("E:\\GitHub\Project-Euler\p081_matrix.txt", "r") as rr:
         for i in range(80):
             str_num = rr.readline().replace("\n", "").split(",")
             path_list.append([int(i) for i in str_num])
 
-    side = 79
-    x, y = 0, 0
-    while x != side:
-        dic = {}
-
-        if a < 0:
-            pass
-        else:
-            dic[path_list[x - 1][y]] = (a, y)
-
-        if b > side:
-            pass
-        else:
-            dic[path_list[x + 1][y]] = (b, y)
-
-        if c < 0:
-            pass
-        else:
-            dic[path_list[x][y - 1]] = (x, c)
-
-        if d > side:
-            pass
-        else:
-            dic[path_list[x][y + 1]] = (x, d)
-
-        cache_num = path_list[x][y]
-        path_list[x][y] = 9999999
-        x, y = dic.get(min(dic))
-        ss[x][y] = 1
-        path_list[x][y] += cache_num
+    # side = 79
+    # x, y = 0, 0
+    # while x != side:
+    #     dic = {}
+    #
+    #     if left < 0:
+    #         pass
+    #     else:
+    #         dic[path_list[x - 1][y]] = (left, y)
+    #
+    #     if right > side:
+    #         pass
+    #     else:
+    #         dic[path_list[x + 1][y]] = (right, y)
+    #
+    #     if down < 0:
+    #         pass
+    #     else:
+    #         dic[path_list[x][y - 1]] = (x, down)
+    #
+    #     if up > side:
+    #         pass
+    #     else:
+    #         dic[path_list[x][y + 1]] = (x, up)
+    #
+    #     cache_num = path_list[x][y]
+    #     path_list[x][y] = 9999999
+    #     x, y = dic.get(min(dic))
+    #     ss[x][y] = 1
+    #     path_list[x][y] += cache_num
 
 
 '''
@@ -1812,3 +1812,143 @@ def No_86_Cuboid_route(maxrange=1000000):
                 return large
 
 
+# Project Euler No.87
+'''
+素数幂三元组
+
+最小的可以表示为一个素数的平方，加上一个素数的立方，再加上一个素数的四次方的数是28。实际上，在小于50的数中，一共有4个数满足这一性质：
+
+28 = 22 + 23 + 24
+33 = 32 + 23 + 24
+49 = 52 + 23 + 24
+47 = 22 + 33 + 24
+
+有多少个小于五千万的数，可以表示为一个素数的平方，加上一个素数的立方，再加上一个素数的四次方？
+'''
+
+def No_87_Prime_power_triples(n=50000000):
+    log2 = int(n ** (1 / 2)) + 1
+    log3 = int(n ** (1 / 3)) + 1
+    log4 = int(n ** (1 / 4)) + 1
+    n2 = [i ** 2 for i in prime_list(log2)]
+    n3 = [i ** 3 for i in prime_list(log3)]
+    n4 = [i ** 4 for i in prime_list(log4)]
+    count = set()
+    for two in n2:
+        for three in n3:
+            for four in n4:
+                if two + three + four < n:
+                    count.add(two + three + four)
+                else:
+                    break
+    return len(count)
+
+# Project Euler No.88
+
+'''
+积和数
+
+若自然数N能够同时表示成一组至少两个自然数{a1, a2, … , ak}的积和和，也即N = a1 + a2 + … + ak = a1 × a2 × … × ak，则N被称为积和数。
+
+例如，6是积和数，因为6 = 1 + 2 + 3 = 1 × 2 × 3。
+
+给定集合的规模k，我们称满足上述性质的最小N值为最小积和数。当k = 2、3、4、5、6时，最小积和数如下所示：
+
+k=2: 4 = 2 × 2 = 2 + 2
+k=3: 6 = 1 × 2 × 3 = 1 + 2 + 3
+k=4: 8 = 1 × 1 × 2 × 4 = 1 + 1 + 2 + 4
+k=5: 8 = 1 × 1 × 2 × 2 × 2 = 1 + 1 + 2 + 2 + 2
+k=6: 12 = 1 × 1 × 1 × 1 × 2 × 6 = 1 + 1 + 1 + 1 + 2 + 6
+
+因此，对于2≤k≤6，所有的最小积和数的和为4+6+8+12 = 30；注意8只被计算了一次。
+
+已知对于2≤k≤12，所有最小积和数构成的集合是{4, 6, 8, 12, 15, 16}，这些数的和是61。
+
+对于2≤k≤12000，所有最小积和数的和是多少？
+
+# 需要一个字典 先出现的进去，后出现如果N相同，则加不进去（求最小）
+# 分解质因子，连续相乘，或者某两个或多个相乘后，用1补位
+    # 因子相加，用1补位，直到等于num
+    # 因子列表后面往前面乘，用1补位，直到等于num
+# 当set(list(range(2, 12001))) == set(字典.keys()) 则停止搜寻
+# 返回sum(字典.values())
+'''
+'''↑
+用此递归的方式遇到因子组合极大的，会计算很久，比如256，在120以内，还行
+def product_sum_more(num, divisor_list, count_num={}):  # 用递归收集所有组合
+    from itertools import combinations
+    import copy
+    if len(divisor_list) == 2:
+        return count_num
+    for i in range(2, len(divisor_list)):
+        for j in combinations(divisor_list, i):
+            tmp_list = copy.deepcopy(divisor_list)
+            pro = 1
+            for k in j:
+                tmp_list.remove(k)
+                pro *= k
+
+            tmp_list.append(pro)
+            count = num - sum(tmp_list) + len(tmp_list)
+            count_num[count] = num
+            product_sum_more(num, tmp_list, count_num)
+
+def product_sum_one_and_more(num, divisor_list, count_num={}):
+    count = num - sum(divisor_list) + len(divisor_list)
+    count_num[count] = num
+    product_sum_more(num, divisor_list, count_num)
+    return count_num
+    
+def No_88_Product_sum_numbers(n=12000):
+    from itertools import count
+    count_dict = {}
+    JUDGE = {i for i in range(2, n + 1)}
+    for num in count(2):
+        if 1 == len(isPrime_factor(num)):
+            continue
+        primeList = isPrime_factor(num)
+        pp = product_sum_one_and_more(num, primeList)
+        for key, value in pp.items():
+            if key in count_dict: continue
+            else: count_dict[key] = value
+        if 0 == len(JUDGE - set(count_dict.keys())):
+            return sum({value for key, value in count_dict.items() if key <= n})
+'''
+'''
+用筛选标记的方式，分解因子，因子个数是标记起点，k 减去 因子的和 则为补位区间
+'''
+'''
+def No_88_Product_sum_numbers(k=12000):
+    from itertools import count
+    group_list = [0] * (k + 1)
+    for num in count(2):
+        if isPrime2(num):
+            continue
+        divisor_list = isPrime_factor(num)
+        pointer = len(divisor_list)
+        max_range = num - sum(divisor_list) + pointer
+        if max_range > k:
+            max_range = k
+        for i in range(pointer, max_range + 1):
+            if not group_list[i]:
+                group_list[i] = num
+        divide_set = set(group_list[2:])
+        if 0 not in divide_set:
+            return sum(divide_set)
+'''
+'''
+n[k]表示minimal product-sum numbers for size=k
+
+n[k]的上界为2*k，因为2*k总是能分解成2*k，然后2*k=k+2+(1)*(k-2)
+
+显然n[k]的下界为k
+
+对于一个数num   因式分解后因子个数为product   这些因子的和为sump
+
+则需要添加的1的个数为num-sump，所以size k=num-sump+product
+'''
+def No_88_Product_sum_numbers(k=12000):  # 此种方法不会取2，因此偏向于上一种方法
+    n = [2 * k for i in range(k)]
+    getpsn(1, 1, 1, 2, k, n)
+    result = sum(set(n[2:]))
+    return result
