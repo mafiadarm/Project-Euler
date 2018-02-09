@@ -1915,28 +1915,6 @@ def No_88_Product_sum_numbers(n=12000):
             return sum({value for key, value in count_dict.items() if key <= n})
 '''
 '''
-用筛选标记的方式，分解因子，因子个数是标记起点，k 减去 因子的和 则为补位区间
-'''
-'''
-def No_88_Product_sum_numbers(k=12000):
-    from itertools import count
-    group_list = [0] * (k + 1)
-    for num in count(2):
-        if isPrime2(num):
-            continue
-        divisor_list = isPrime_factor(num)
-        pointer = len(divisor_list)
-        max_range = num - sum(divisor_list) + pointer
-        if max_range > k:
-            max_range = k
-        for i in range(pointer, max_range + 1):
-            if not group_list[i]:
-                group_list[i] = num
-        divide_set = set(group_list[2:])
-        if 0 not in divide_set:
-            return sum(divide_set)
-'''
-'''
 n[k]表示minimal product-sum numbers for size=k
 
 n[k]的上界为2*k，因为2*k总是能分解成2*k，然后2*k=k+2+(1)*(k-2)
@@ -1946,9 +1924,137 @@ n[k]的上界为2*k，因为2*k总是能分解成2*k，然后2*k=k+2+(1)*(k-2)
 对于一个数num   因式分解后因子个数为product   这些因子的和为sump
 
 则需要添加的1的个数为num-sump，所以size k=num-sump+product
-'''
+
 def No_88_Product_sum_numbers(k=12000):  # 此种方法不会取2，因此偏向于上一种方法
     n = [2 * k for i in range(k)]
     getpsn(1, 1, 1, 2, k, n)
     result = sum(set(n[2:]))
     return result
+
+def getpsn(num, sump, product, start, maxk, n):  # 088 用递归直接处理
+    """
+    对于一个数num   因式分解后因子个数为 product   这些因子的和为sump
+    则需要添加的1 的个数为 num - sump，所以size k = num - sump + product
+    """
+    k = num - sump + product
+    if k < maxk:
+        if num < n[k]:
+            n[k] = num
+        for i in range(start, maxk // num * 2):  # 控制num<=2*maxk
+            getpsn(num * i, sump + i, product + 1, i, maxk, n)
+            
+[60, 1, 4, 6, 8, 8, 12, 12, 12, 15, 16, 16, 16, 18, 20, 24, 24, 24, 24, 24, 28, 27, 32, 30, 48, 32, 32, 42, 36, 36]
+30以内的列表为此，求的不是最小N值
+'''
+'''
+用筛选标记的方式，分解因子，因子个数是标记起点，num 减去 因子的和 则为补位区间
+比如 16 因子为[2,2,2,2] 因子和为8 个数为4 则为从4开始，往后16-8= 8个位可以补
+'''
+
+def No_88_Product_sum_numbers(k=12000):
+    from itertools import count
+    group_list = [0] * (k + 1)
+    pointer_shadow = 0
+
+    for num in count(2):
+        divisor_list = isPrime_factor(num)
+        pointer = len(divisor_list)  # 起点，因子个数，[所有因子相加+1 = 所有因子相乘+1]
+
+        if 1 == pointer:  # 去除质数
+            continue
+
+        max_range = num - sum(divisor_list) + pointer
+
+        if max_range > k:  # 防止超出边界
+            max_range = k
+
+        if pointer_shadow < pointer:  # 优化一下，不用从头开始打标
+            pointer_shadow = pointer
+
+        for i in range(pointer_shadow, max_range + 1):
+            if not group_list[i]:
+                group_list[i] = num
+        pointer_shadow = max_range + 1
+
+        if group_list[-1]:
+            divide_set = set(group_list[2:])
+            return sum(divide_set)
+
+# Project Euler No.89
+'''
+罗马数字
+
+要正确地用罗马数字表达一个数，必须遵循一些基本规则。尽管符合规则的写法有时会多于一种，但对每个数来说总是存在一种“最好的”写法。
+
+例如，数16就至少有六种写法：
+
+IIIIIIIIIIIIIIII
+VIIIIIIIIIII
+VVIIIIII
+XIIIIII
+VVVI
+XVI
+
+然而，根据规则，只有XIIIIII和XVI是合理的写法，而后一种因为使用了最少的数字而被认为是最有效的写法。
+
+在这个11K的文本文件roman.txt （右击并选择“目标另存为……”）中包含了一千个合理的罗马数字写法，但并不都是最有效的写法；有关罗马数字的明确规则，可以参考关于罗马数字。
+
+求出将这些数都写成最有效的写法所节省的字符数。
+
+注意：你可以假定文件中的所有罗马数字写法都不包含连续超过四个相同字符。
+
+    I = 1 
+    V = 5 
+    X = 10 
+    L = 50 
+    C = 100 
+    D = 500 
+    M = 1000
+
+    数字必须按大小的顺序排列
+    M，C和X不能等同或超过较小的面值
+    D，L和V每个只能出现一次
+
+    减法原则：
+    只有一个I，X和C可以用作减法对的一部分的主要数字。
+    I只能放在V和X之前。
+    X只能放在L和C之前。
+    C只能放在D和M之前。
+'''
+
+def No_89_Roman_numerals():
+    text = "C:\\Users\lo\Documents\GitHub\Project_Euler\p089_roman.txt"
+    with open(text, "r") as rr:
+        ss = rr.readlines()
+
+    ss = "".join(ss)
+    X = (("IIII", 2), ("XXXX", 2), ("CCCC", 2), ("VIIII", 1), ("LXXXX", 1), ("DCCCC", 1))   # 规定一个统计方式
+    return sum([ss.count(num) * x for num, x in X])
+
+# Project Euler No.90
+'''
+立方体数字对
+
+在一个立方体的六个面上分别标上不同的数字（从0到9），对另一个立方体也如法炮制。将这两个立方体按不同的方向并排摆放，我们可以得到各种各样的两位数。
+
+例如，平方数64可以通过这样摆放获得：
+
+
+事实上，通过仔细地选择两个立方体上的数字，我们可以摆放出所有小于100的平方数：01、04、09、16、25、36、49、64和81。
+
+例如，其中一种方式就是在一个立方体上标上{0, 5, 6, 7, 8, 9}，在另一个立方体上标上{1, 2, 3, 4, 8, 9}。
+
+在这个问题中，我们允许将标有6或9的面颠倒过来互相表示，只有这样，如{0, 5, 6, 7, 8, 9}和{1, 2, 3, 4, 6, 7}这样本来无法表示09的标法，才能够摆放出全部九个平方数。
+
+在考虑什么是不同的标法时，我们关注的是立方体上有哪些数字，而不关心它们的顺序。
+
+{1, 2, 3, 4, 5, 6}等价于{3, 6, 4, 1, 2, 5}
+{1, 2, 3, 4, 5, 6}不同于{1, 2, 3, 4, 5, 9}
+
+但因为我们允许在摆放两位数时将6和9颠倒过来互相表示，这个例子中的两个不同的集合都可以代表拓展集{1, 2, 3, 4, 5, 6, 9}。
+
+对这两个立方体有多少中不同的标法可以摆放出所有的平方数？
+'''
+
+def No_90_Cube_digit_pairs():
+    pass
