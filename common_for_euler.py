@@ -15,6 +15,7 @@
                    排序方法
 ==============================
 """
+import time
 __author__ = 'Loffew'
 
 
@@ -184,6 +185,7 @@ def divide_count(num, dig, tmp_dict):  # num写成+dig的所有方式 见076
         else:
             return tmp_dict.get(str(num) + ',' + str(dig))
 
+
 def draw_cc(position):  # 084
     import random
     cc_map = {0: 0, 1: 10}
@@ -221,3 +223,20 @@ def draw_ch(position):  # 084
         return position - 3
     return position
 
+
+def max_prime_last_ten():
+    """
+    把2的次方数拆开来计算，每次计算只取最后10位，不影响最后结果
+    返回结果为 2 ^ 57885161 - 1 的最后10位数
+    """
+    n = 57885161
+    d = 500  # 位数是最长位数的1/3是最快的
+    ll = [d] * (n // d)
+    ll.append(n % d)
+
+    a = 1
+    for p in ll:
+        a *= int(str(2 ** p)[-10:])
+        a = int(str(a)[-10:])
+
+    return a - 1

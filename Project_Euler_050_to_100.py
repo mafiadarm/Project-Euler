@@ -1,6 +1,6 @@
 # -- coding = utf-8 --
 # python version 3.6
-from Project_Euler.common_for_euler import *
+from .common_for_euler import *
 
 # Project Euler No.51
 '''
@@ -1544,7 +1544,7 @@ def No_81_Path_sum_two_ways():
 '''
 
 
-def No_81_Path_sum_three_ways():
+def No_82_Path_sum_three_ways():
     path_list = []
     with open("p081_matrix.txt", "r") as rr:
         for i in range(80):
@@ -1714,6 +1714,7 @@ G2J	F3	U2	F2	F1	R3	E3	E2	CH2	E1	FP
 如果我们不用两个六面的骰子而是用两个四面的骰子，求出三个最有可能停下的方格构成的数字串。
 '''
 
+
 def No_84_Monopoly_odds():
     import random
     position = 0
@@ -1766,6 +1767,7 @@ def No_84_Monopoly_odds():
 【先求范围】确定范围 wide, large = 100, 100 上面公式会达到25502500，所以可以把遍历范围放到100以内
 '''
 
+
 def No_85_Counting_rectangles(n=2000000):
     max_range, value = 1, 0
     while value < n:
@@ -1781,6 +1783,7 @@ def No_85_Counting_rectangles(n=2000000):
             if total > n:
                 break
     return x, y, z
+
 
 # Project Euler No.86
 '''
@@ -1799,6 +1802,7 @@ def No_85_Counting_rectangles(n=2000000):
 把长方体想想成一个纸盒子，把盒子打开，这条线就是对角线，就是求直角三角形的组合
 当直角三角形，最短两条边均不大于100的情况下，有2060种情况可以满足
 '''
+
 
 def No_86_Cuboid_route(maxrange=1000000):
     countKind = large = 0
@@ -1826,6 +1830,7 @@ def No_86_Cuboid_route(maxrange=1000000):
 有多少个小于五千万的数，可以表示为一个素数的平方，加上一个素数的立方，再加上一个素数的四次方？
 '''
 
+
 def No_87_Prime_power_triples(n=50000000):
     log2 = int(n ** (1 / 2)) + 1
     log3 = int(n ** (1 / 3)) + 1
@@ -1842,6 +1847,7 @@ def No_87_Prime_power_triples(n=50000000):
                 else:
                     break
     return len(count)
+
 
 # Project Euler No.88
 
@@ -1951,6 +1957,7 @@ def getpsn(num, sump, product, start, maxk, n):  # 088 用递归直接处理
 比如 16 因子为[2,2,2,2] 因子和为8 个数为4 则为从4开始，往后16-8= 8个位可以补
 '''
 
+
 def No_88_Product_sum_numbers(k=12000):
     from itertools import count
     group_list = [0] * (k + 1)
@@ -1979,6 +1986,7 @@ def No_88_Product_sum_numbers(k=12000):
         if group_list[-1]:
             divide_set = set(group_list[2:])
             return sum(divide_set)
+
 
 # Project Euler No.89
 '''
@@ -2022,14 +2030,16 @@ XVI
     C只能放在D和M之前。
 '''
 
+
 def No_89_Roman_numerals():
     text = "C:\\Users\lo\Documents\GitHub\Project_Euler\p089_roman.txt"
     with open(text, "r") as rr:
         ss = rr.readlines()
 
     ss = "".join(ss)
-    X = (("IIII", 2), ("XXXX", 2), ("CCCC", 2), ("VIIII", 1), ("LXXXX", 1), ("DCCCC", 1))   # 规定一个统计方式
+    X = (("IIII", 2), ("XXXX", 2), ("CCCC", 2), ("VIIII", 1), ("LXXXX", 1), ("DCCCC", 1))  # 规定一个统计方式
     return sum([ss.count(num) * x for num, x in X])
+
 
 # Project Euler No.90
 '''
@@ -2055,6 +2065,7 @@ def No_89_Roman_numerals():
 
 对这两个立方体有多少中不同的标法可以摆放出所有的平方数？
 '''
+
 
 def No_90_Cube_digit_pairs():
     pass
