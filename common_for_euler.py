@@ -16,11 +16,22 @@
 ==============================
 """
 import time
+
 __author__ = 'Loffew'
 
 
 def __init__():
     pass
+
+
+def time_pay(func):
+    def get_time(*args, **kwargs):
+        start_time = time.time()
+        func(*args, **kwargs)
+        end_time = time.time() - start_time
+        print(end_time)
+
+    return get_time
 
 
 def per_com(num_range, amount):
@@ -240,3 +251,11 @@ def max_prime_last_ten():
         a = int(str(a)[-10:])
 
     return a - 1
+
+
+def No_92_get_sum(x):
+    number_list = []
+    while x:
+        x, temp = divmod(x, 10)
+        number_list.append(temp)
+    return sum([t * t for t in number_list])

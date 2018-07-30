@@ -1,6 +1,6 @@
 # -- coding = utf-8 --
 # python version 3.6
-from .common_for_euler import *
+from common_for_euler import *
 
 # Project Euler No.51
 '''
@@ -2067,5 +2067,105 @@ def No_89_Roman_numerals():
 '''
 
 
+@time_pay
 def No_90_Cube_digit_pairs():
-    pass
+
+    from itertools import combinations
+
+    nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    con = set()
+
+    for i in combinations(nums, 6):
+        for j in combinations(nums, 6):
+            if j + i not in con:
+                if (0 in i and 1 in j) or (1 in i and 0 in j):
+                    if (0 in i and 4 in j) or (4 in i and 0 in j):
+                        if (0 in i and (9 in j or 6 in j)) or ((9 in i or 6 in i) and 0 in j):
+                            if (1 in i and (6 in j or 9 in j)) or ((6 in i or 9 in i) and 1 in j):
+                                if (2 in i and 5 in j) or (5 in i and 2 in j):
+                                    if (3 in i and (6 in j or 9 in j)) or ((6 in i or 9 in i) and 3 in j):
+                                        if (4 in i and (9 in j or 6 in j)) or ((9 in i and 6 in i) and 4 in j):
+                                            if ((6 in i or 9 in i) and 4 in j) or (4 in i and (6 in j or 9 in j)):
+                                                if (8 in i and 1 in j) or (1 in i and 8 in j):
+                                                    con.add(i + j)
+
+    print(len(con))
+
+
+# Project Euler No.91
+"""
+格点直角三角形
+
+点P(x1, y1)和点Q(x2, y2)都是格点，并与原点O(0,0)构成ΔOPQ。
+
+
+当点P和点Q的所有坐标都在0到2之间，也就是说0 ≤ x1, y1, x2, y2 ≤ 2时，恰好能构造出14个直角三角形。
+
+
+如果0 ≤ x1, y1, x2, y2 ≤ 50，能构造出多少个直角三角形？
+"""
+
+@time_pay
+def No_91_Right_triangles_with_integer_coordinates():
+    """
+    直角三角形公式：两短边长平方相加等于长边平方
+    除去重复的
+    :return:
+    """
+    count = 0
+    for x1 in range(51):
+        for y1 in range(51):
+            for x2 in range(51):
+                for y2 in range(51):
+                    aa = x1**2 + y1**2
+                    bb = x2**2 + y2**2
+                    cc = (x1-x2)**2 + (y1-y2)**2
+                    if (aa == bb + cc or bb == aa + cc or cc == aa + bb) and aa != 0 and bb != 0 and cc != 0:
+                        count += 1
+    print(count/2)
+
+
+# Project Euler No.92
+"""
+平方数字链
+
+将一个数的所有数字的平方相加得到一个新的数，不断重复直到新的数已经出现过为止，这构成了一条数字链。
+
+例如，
+
+44 → 32 → 13 → 10 → 1 → 1
+85 → 89 → 145 → 42 → 20 → 4 → 16 → 37 → 58 → 89
+
+可见，任何一个到达1或89的数字链都会陷入无尽的循环。更令人惊奇的是，从任意数开始，最终都会到达1或89。
+
+有多少个小于一千万的数最终会到达89？
+"""
+
+@time_pay
+def No_92_Square_digit_chains():
+    """
+    10000000以下平方和最大的数是9999999，其平方和为81*7=567。所以，可以先建立一个600以下的字典，
+    其他数在运行过程中一旦碰到字典中的数，马上将1或89作为结果反馈。这样，可以加速运算过程。
+    :return:
+    """
+    dict_600 = {}
+    for x in range(1, 600):
+        d = x
+        while x != 1 and x != 89:
+            # x = sum([int(i) ** 2 for i in list(str(x))])
+            x = No_92_get_sum(x)
+        dict_600[d] = x
+
+    count = 0
+    for num in range(1, 10**7):
+        # ss = sum([int(i) ** 2 for i in list(str(num))])
+        ss = No_92_get_sum(num)
+        if dict_600[ss] == 89:
+            count += 1
+
+    print(count)
+
+
+if __name__ == '__main__':
+    No_92_Square_digit_chains()
+
