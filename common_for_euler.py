@@ -64,6 +64,14 @@ def isPrime_factor(n):  # 列出所有质因子，如果传1进去，列表会�
     return li
 
 
+def true_divisors(num):  # 列出一个数的所有真因数
+    ll = []
+    for j in range(1, num):
+        if num % j == 0:
+            ll.append(j)
+    return ll
+
+
 def common_Divisor(x, y, z, li):  # 最小公倍数 详见 005
     while y:
         x, y = y, x % y
@@ -259,3 +267,33 @@ def No_92_get_sum(x):
         x, temp = divmod(x, 10)
         number_list.append(temp)
     return sum([t * t for t in number_list])
+
+
+def No_93_number_tuple(m):
+    for i in range(1, m - 2):
+        for j in range(i + 1, m - 1):
+            for k in range(j + 1, m):
+                for l in range(k + 1, m + 1):
+                    yield (i, j, k, l)
+
+
+def No_93_operations(t):
+    if len(t) == 1:
+        yield t[0]
+        return
+
+    for i, e in enumerate(t):
+        for result in No_93_operations(t[:i] + t[i + 1:]):
+            yield e * result
+            yield e + result
+            yield e - result
+            yield result - e
+            if result != 0:
+                yield e / float(result)
+
+
+def No_93_consecutive_digits(digits):
+    from itertools import count
+    for i in count(1):
+        if i not in digits:
+            return i - 1

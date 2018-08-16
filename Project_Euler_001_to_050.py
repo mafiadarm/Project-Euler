@@ -986,7 +986,7 @@ def No_21_Amicable_Numbers(num=10000):
             li.append(num)
             li.append(x)
 
-    return reduce(lambda a, b: a + b, li) / 2
+    print(reduce(lambda a, b: a + b, li) / 2)
 
 
 # Project Euler No.22
@@ -2097,4 +2097,5 @@ def No_50_Consecutive_Prime_sum(num=10**6):
     return prime_max_len, max_len
 '''
 
-
+if __name__ == '__main__':
+    No_21_Amicable_Numbers()
