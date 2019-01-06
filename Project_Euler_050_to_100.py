@@ -380,7 +380,7 @@ def No_58_Spiral_primes():
         side_large += 2
         count_spiral += 4
         for j in range(1, 4):
-            if isPrime2(side_large ** 2 - interval * j):
+            if is_prime2(side_large ** 2 - interval * j):
                 count_prime += 1
         if count_prime / count_spiral < 0.1:
             return side_large
@@ -452,7 +452,7 @@ def No_60_Prime_pair_sets():
         for o in combinations(i, 2):
             num1 = int(str(o[0]) + str(o[1]))
             num2 = int(str(o[1]) + str(o[0]))
-            if not isPrime2(num1) or not isPrime2(num2):
+            if not is_prime2(num1) or not is_prime2(num2):
                 flag = False
                 break
         if flag:
@@ -1177,7 +1177,7 @@ def No_73_Counting_fractions_in_a_range(max_range=12000):
 
 
 '''
-更科学的方法
+#更科学的方法
 count = {}  # 削去重复项
 for i in range(3, 12001):
         for j in range (int(i / 3),int(i / 2 + 1)):  # 把范围缩小,而且过滤了非互质数
@@ -1372,9 +1372,7 @@ def No_76_Prime_summations(num=100, min_range=5000):
 # Project Euler No.78
 '''
 硬币分拆
-
 记p(n)是将n枚硬币分拆成堆的不同方式数。例如，五枚硬币有7种分拆成堆的不同方式，因此p(5)=7。
-
 OOOOO
 OOOO O
 OOO OO
@@ -1382,10 +1380,10 @@ OOO O O
 OO OO O
 OO O O O
 O O O O O
-
 找出使p(n)能被一百万整除的最小n值。 
 
-开始还理解错了...被100W整除的就是2   100W是被除数就是以下...
+分析：
+被100W整除的就是2   100W是被除数就是以下...
 维基百科的公式
 p(k) = p(k-(3*n*n-n)/2) + p(k-(3*n*n+n)/2) - p(k-(3*n*n+5*n+2)/2) - p(k-(3*n*n+7*n+4)/2) +... (n from 1 to ...) while p(0) = 1 and p(1) = 1
 '''
@@ -2288,5 +2286,5 @@ def No_95_Amicable_chains():
 
 
 if __name__ == '__main__':
-    No_94_Almost_equilateral_triangles()
+    No_93_Arithmetic_expressions()
 

@@ -90,7 +90,7 @@ def No_3_IsPrime(num=600851475143):
 def isPrime1(n):
     ls = []
     for j in n:
-        if isPrime2(j):
+        if is_prime2(j):
            ls.append(j)#把是质数的因子加入列表
     return print("它的最大质因数为%s"%max(ls))
 '''
@@ -228,7 +228,7 @@ def No_6_Square_Foot_Square(s=100):
 def No_7_Prime_X(num=10001):
     b,li = 2,[1]
     while li.index(li[-1]) != num:       
-        if isPrime2(b):
+        if is_prime2(b):
             li.append(b)
             b += 1
         else:
@@ -240,7 +240,7 @@ def No_7_Prime_X(num=10001):
 def No_7_Prime_X(num=10001):
     from itertools import count
     for i in count(2):
-        if common_for_euler.isPrime2(i) and num > 0:
+        if common_for_euler.is_prime2(i) and num > 0:
             num -= 1
         elif num == 0:
             return i - 1
@@ -318,7 +318,7 @@ def No_9_Pythagorean_Triples(ss=1000):
 def No_10_Sum_Prime(n=2000000):
     su = 0
     for i in range(n):
-        if common_for_euler.isPrime2(i):
+        if common_for_euler.is_prime2(i):
             su += i
     return su
 
@@ -1187,7 +1187,7 @@ def No_27_Quadratic_Primes():
         for j in range(-1000, 1000):
             cha = 0
             res = j  #
-            while common_for_euler.isPrime2(res):  # 只要是连续的，cha就会保持计数
+            while common_for_euler.is_prime2(res):  # 只要是连续的，cha就会保持计数
                 res = cha ** 2 + cha * i + j
                 cha += 1
             if po < cha:  # 对以上循环的结果进行赋值回收
@@ -1506,7 +1506,7 @@ def No_35_Circular_Primes(num=1000000):
         str_Num = str(m)
         for n in range(len(str_Num)):
             str_Num = str_Num[1:] + str_Num[0]
-            if common_for_euler.isPrime2(int("".join(str_Num))):
+            if common_for_euler.is_prime2(int("".join(str_Num))):
                 pass
             else:
                 lss += 1
@@ -1608,8 +1608,8 @@ def No_37_Truncatable_Primes():
     lis = []
     num = 10
     while len(lis) < 11:
-        if sum([1 for i in range(len(str(num))) if common_for_euler.isPrime2(int(str(num)[i::]))]) == len(str(num)):
-            if sum([1 for i in range(1, len(str(num))) if common_for_euler.isPrime2(int(str(num)[:-i:]))]) == len(str(num)) - 1:
+        if sum([1 for i in range(len(str(num))) if common_for_euler.is_prime2(int(str(num)[i::]))]) == len(str(num)):
+            if sum([1 for i in range(1, len(str(num))) if common_for_euler.is_prime2(int(str(num)[:-i:]))]) == len(str(num)) - 1:
                 lis.append(num)
         num += 1
     return sum(lis), lis
@@ -1738,7 +1738,7 @@ def No_41_Pandigital_Prime():
     from itertools import permutations
     for ite in range(9, 0, -1):
         lis = "123456789"[:ite:]
-        prime_list = [int("".join(i)) for i in permutations(lis) if common_for_euler.isPrime2(int("".join(i)))]
+        prime_list = [int("".join(i)) for i in permutations(lis) if common_for_euler.is_prime2(int("".join(i)))]
         if len(prime_list) != 0:
             return max(prime_list)
 
@@ -1796,7 +1796,7 @@ d8d9d10=289能被17整除
 def No_43_Sub_String_Divisibility():
     from itertools import permutations
     permutations_list = [per_num for per_num in permutations("0123456789") if per_num[0] != "0"]
-    divisor_list = [p for p in range(18) if common_for_euler.isPrime2(p)]
+    divisor_list = [p for p in range(18) if common_for_euler.is_prime2(p)]
     result_list = []
     for i in permutations_list:
         judge = 0
@@ -1932,8 +1932,8 @@ def No_46_Goldbach_other_Conjecture():
     range_num = 10
     while True:
         range_num *= 10
-        prime_nums = [i for i in range(2, range_num) if common_for_euler.isPrime2(i)]
-        odd_divisible_num = [i for i in range(2, range_num) if not common_for_euler.isPrime2(i) and i % 2 == 1]
+        prime_nums = [i for i in range(2, range_num) if common_for_euler.is_prime2(i)]
+        odd_divisible_num = [i for i in range(2, range_num) if not common_for_euler.is_prime2(i) and i % 2 == 1]
         delete_num = []
         for i in odd_divisible_num:
             for j in prime_nums:
@@ -2013,7 +2013,7 @@ def No_48_Self_Powers():
 
 
 def No_49_Prime_Permutations():
-    prime_list = [i for i in range(10 ** 3, 10 ** 4) if common_for_euler.isPrime2(i)]
+    prime_list = [i for i in range(10 ** 3, 10 ** 4) if common_for_euler.is_prime2(i)]
     lis, result_num = [], ""
     for j in prime_list:
         if j + 3330 in prime_list and j + 6660 in prime_list and sorted(str(j)) == sorted(str(j + 3330)) == sorted(
@@ -2098,4 +2098,4 @@ def No_50_Consecutive_Prime_sum(num=10**6):
 '''
 
 if __name__ == '__main__':
-    No_21_Amicable_Numbers()
+    print(No_17_Number_Letter_counts())

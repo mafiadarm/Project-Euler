@@ -44,7 +44,7 @@ def per_com(num_range, amount):
     print(chara_com.ljust(30, " "))
 
 
-def isPrime2(n):  # 短除法，验证列表内的数字是否是质数
+def is_prime2(n):  # 短除法，验证列表内的数字是否是质数
     if int(n ** 0.5) ** 2 != n and n != 1 and n != 0:
         for i in range(2, int(n ** 0.5) + 1):
             if n % i == 0:
@@ -53,23 +53,24 @@ def isPrime2(n):  # 短除法，验证列表内的数字是否是质数
 
 
 def isPrime_factor(n):  # 列出所有质因子，如果传1进去，列表会是空值
-    li, f = [], 2
+    result_list, f = [], 2
     while f * f <= n:
         while not n % f:
-            li.append(f)
+            result_list.append(f)
             n //= f
         f += 1
     if n != 1:
-        li.append(n)
-    return li
+        result_list.append(n)
+    return result_list
 
 
 def true_divisors(num):  # 列出一个数的所有真因数
-    ll = []
-    for j in range(1, num):
+    divisors = {1}
+    for j in range(2, int(num**0.5)+1):
         if num % j == 0:
-            ll.append(j)
-    return ll
+            divisors.add(j)
+            divisors.add(num/j)
+    return divisors
 
 
 def common_Divisor(x, y, z, li):  # 最小公倍数 详见 005
@@ -108,6 +109,14 @@ def prime_list(n, f=0):  # 返回N以内所有的素数
                 l_result[j] = False
     return [k for k, v in enumerate(l_result) if v and k >= f]  # 返回处理后的列表
 
+def no_prime_list(n):  # 返回N以内所有不是素数的列表
+    l_result = [True] * n  # 占位 预留True
+    l_result[0], l_result[1] = True, True  # 去掉1,0
+    for i in range(2, n):
+        if l_result[i]:
+            for j in range(i * i, n, i):  # 去掉平方，及倍数
+                l_result[j] = False
+    return [k for k, v in enumerate(l_result) if not v]  # 返回处理后的列表
 
 def not_prime_list(n, f=0):  # 返回N以内所有的非素数
     l_result = [True] * n  # 占位 预留True
