@@ -16,11 +16,13 @@
 
 def fibonacci(ask):
     x, y, result = 1, 2, 0
-
-    while y < ask:
-        if y%2==0:
+    
+    count = 2
+    while y <= ask:
+        if count % 2 == 0:
             result += y
         x, y = y, x + y
+        count += 1
 
     return result
 

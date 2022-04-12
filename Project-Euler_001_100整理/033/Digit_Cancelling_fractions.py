@@ -13,22 +13,29 @@
 
 将这四个分数的乘积写成最简分数，求此时分母的值。
 """
+
+def gys(x, y):  # 求x,y的最大公约数  可以用math.gcd()
+    while y:
+        x, y = y, x % y
+    return x
+
 ask = 100
-result = 1
+num_result = 1
+den_result = 1
 view = []
 
 # 100以内的两位数相比较
 for numerator in range(10, ask):
-    for denominator in range(numerator, ask):
+    for denominator in range(numerator+1, ask):
         count = numerator / denominator  # 正常值
-        # 处理消掉相同的数字
+        # 字符串化,用于比较
         a, b = sorted(str(numerator)), sorted(str(denominator))
 
-        # 确保不是回文
+        # 确保不是回文或者相同
         if a == b:
             continue
 
-        # 去掉普通，因为有0，要么分母，要么分子，或者在普通实例里面
+        # 去掉平凡解，因为有0，要么分母，要么分子，或者在普通实例里面
         elif "0" in a + b:
             continue
 
@@ -43,9 +50,16 @@ for numerator in range(10, ask):
                 b.remove(t)
 
         # 处理完之后进行比较
-        if int(a.pop())/int(b.pop()) == count:
-            # 求乘积
-            result *= denominator/numerator
-            view.append(f"{numerator}/{denominator}=1/{int(denominator/numerator)}")
+        a = int(('').join(a))
+        b = int(('').join(b))
+        if a / b == count:
+            k = gys(a, b)
+            s_a = int(a / k)
+            s_b = int(b / k)
+            num_result *= s_a
+            den_result *= s_b
+            view.append(f"{numerator}/{denominator}={s_a}/{s_b}")
 
+rk = gys(num_result, den_result)
+result = int(den_result / rk)
 print(result, view)

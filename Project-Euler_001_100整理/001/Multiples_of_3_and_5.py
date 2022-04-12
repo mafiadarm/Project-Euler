@@ -22,7 +22,7 @@ def sumb(xrange=0,num=0): #省略大部分遍历时间
     return (num+num*(xrange//num))*(xrange//num)/2
 """
 
-ask = 1000 - 1
+ask = 1000
 
 three_high = ask // 3
 five_high = ask // 5
@@ -37,5 +37,5 @@ all_sum = sum_three + sum_five - repetition
 print(sum_three, sum_five, repetition, all_sum)
 
 # 或者直接计算为
-three_five_in_thousand = sum([n for n in range(1000) if n%3==0 or n%5==0])
+three_five_in_thousand = sum([n for n in range(1001) if n%3==0 or n%5==0])
 print(three_five_in_thousand)

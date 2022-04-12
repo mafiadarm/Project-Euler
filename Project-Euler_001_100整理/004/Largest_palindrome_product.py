@@ -19,6 +19,6 @@ def palindromic():
 
     for check in ss[::-1]:
         for test in range(100, 1000):
-            if check % test == 0 and check/test<1000:
+            if check % test == 0 and check / test < 1000:
                 return check
 

@@ -38,4 +38,5 @@ def xxx():
         if flag:
             ll.append(sum(i))
     return min(ll)
-    
+
+# 太慢,需要参考其他的

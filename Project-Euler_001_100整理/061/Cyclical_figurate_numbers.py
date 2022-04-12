@@ -24,6 +24,7 @@
 因为是在确定的元素里面找，一定能找到，所以选择用递归查询
 """
 from itertools import count
+import copy
 
 def x_shape_list(lambda_func, max_range, min_range=1):  # lambda_func= lambda x:公式 范例见061
     # 构造在一个范围内的多边形数的集合
@@ -34,46 +35,58 @@ def x_shape_list(lambda_func, max_range, min_range=1):  # lambda_func= lambda x:
             continue
         if polygons > max_range:  # 超过此值说明构造完成
             return polygons_list
-        polygons_list.append(polygons)
+        
+        c = str(polygons)  # 转换为str,后面好比较
+        if c[2] == "0":  # 第3位肯定不为0
+            continue
+        polygons_list.append(c)
+        
+min_num=1000
+max_num=10000
 
-def recursion(result_list, polygons_list, flag):
+p3 = x_shape_list(lambda n: int(n*(n+1)/2), max_num, min_num)
+p4 = x_shape_list(lambda n: n*n, max_num, min_num)
+p5 = x_shape_list(lambda n: int(n*(3*n-1)/2), max_num, min_num)
+p6 = x_shape_list(lambda n: n*(2*n-1), max_num, min_num)
+p7 = x_shape_list(lambda n: int(n*(5*n-3)/2), max_num, min_num)
+p8 = x_shape_list(lambda n: n*(3*n-2), max_num, min_num)
+
+# 因为p8是最少的,所以从P8开始找
+# 需要用 p3-p8的列表, 需要一个寻找的flag列表[Flase, Flase, Flase, ..., 已经寻找到的数字]
+# 需要解决有相同前2位的数字问题(或者解决重复问题)
+# 经过验证,P8没有前2位相同的数字 len(p8)==len(set([i[:2] for i in p8]))
+
+p_dict = {
+    'p8': p8,
+    'p7': p7,
+    'p6': p6,
+    'p5': p5,
+    'p4': p4,
+    'p3': p3
+}
+
+def find_num_group(p_dict, p_key, num, result):
     """
-    :param result_list: 传进来的时候是包含起始数的列表，会在迭代中增加，当达到6的时候，会完成
-    :param polygons_list: 包含各个多边形数集合的列表
-    :param flag: 寻址标记
-    :return:
+        用回调函数不断匹配数字
     """
-    # 当列表达到6个元素，并且首尾相连的时候，完成搜寻
-    if len(result_list) == 6 and str(result_list[-1])[:2] == str(result_list[0])[2:]:
-        return print(result_list, sum(result_list))
-
-    # 进入递归
-    for i in range(6):
-        if flag[i]: continue  # 如果为真则说明在这个集合已经查到了
-
-        # 用flag标记位置是避免循环不是按从小到大的多边形顺序
-        flag[i] = True  # 标记此条列表已用，如果在下面的遍历中达成，进入递归的时候也带进去。
-
-        for polygons in polygons_list[i]:
-            if str(polygons)[:2] == str(result_list[-1])[2:]:  # 和列表最后一个数比较，列表在变化，所以每次最后一个数也在变
-                recursion(result_list.extend(polygons), polygons_list, flag)
-
-        flag[i] = False  # 如果没找到，则重新标记为待用
-
-def xxx(min_num=1000, max_num=10000):
-    p3 = x_shape_list(lambda n: n * (n + 1) // 2, max_num, min_num)
-    p4 = x_shape_list(lambda n: n * n, max_num, min_num)
-    p5 = x_shape_list(lambda n: n * (3 * n - 1) // 2, max_num, min_num)
-    p6 = x_shape_list(lambda n: n * (2 * n - 1), max_num, min_num)
-    p7 = x_shape_list(lambda n: n * (5 * n - 3) // 2, max_num, min_num)
-    p8 = x_shape_list(lambda n: n * (3 * n - 2), max_num, min_num)
-    p_list = [p3, p4, p5, p6, p7, p8]
-
-    flag = [False] * 6
-    flag[-1] = True  # 从p8开始找，则是前两位是p3的后两位
-
-    for i in p8:  # 以p8为开始，因为p8必定是最后那个数，既是结束又是开始
-        recursion([i], p_list, flag)
-
-
+    result.append(num)  # 加入第一个数字
+    new_dict = copy.deepcopy(p_dict)  # copy以备用[保留原来的,如果回调可以保证之前的存在]
+    del new_dict[p_key]  # 去掉自身再往下匹配
     
+    if not new_dict:  # 如果列表中有6个数字了
+        if result[0][:2] == result[-1][2:]:  # 且第一个数和最后一个数能匹配头尾[和寻找时匹配相反]
+            print(result)
+        else:
+            del result[-1]  # 说明没匹配上,删除最后一个数字,回调后重新匹配
+    
+    else:
+        for k in new_dict:  # 遍历剩下的字典中的key
+            for test in new_dict[k]:  # 遍历key的值,用于比较
+                if num[2:] == test[:2]:  # 如果[目标数字的后面2位=匹配的数字的前面]能头尾匹配
+                    find_num_group(new_dict, k, test, result)  # 按照剩下的继续往下传
+                
+        del result[-1]  # 说明第一个数字和所有的都不匹配,删除后重新匹配
+
+
+for f_num in p_dict['p8']:  # 遍历这个key中所有的数字,作为对比使用
+    find_num_group(p_dict, 'p8', f_num, [])
